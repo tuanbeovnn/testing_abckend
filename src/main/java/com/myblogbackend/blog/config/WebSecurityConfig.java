@@ -3,6 +3,7 @@ package com.myblogbackend.blog.config;
 import com.myblogbackend.blog.security.JwtAuthenticationEntryPoint;
 import com.myblogbackend.blog.security.JwtAuthenticationFilter;
 import com.myblogbackend.blog.services.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,13 +24,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
     @Bean
     public JwtAuthenticationFilter authenticationJwtTokenFilter() {
         return new JwtAuthenticationFilter();
@@ -89,14 +87,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/user/api/v1/auth/token/refresh").permitAll()
                 .requestMatchers("/payment/api/v1/payments/ipn/**").permitAll()
                 .anyRequest().authenticated();
-
-
         http.authenticationProvider(authenticationProvider());
-
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-//        http.addFilterBefore(new ApiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
 
