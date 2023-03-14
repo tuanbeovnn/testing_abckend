@@ -84,9 +84,10 @@ public class WebSecurityConfig {
                 .requestMatchers("/user/api/v1/core/**").permitAll()
                 .requestMatchers("/user/api/v1/auth/token/refresh").permitAll()
                 .requestMatchers("/payment/api/v1/payments/ipn/**").permitAll()
-                .anyRequest().authenticated();
-        http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().authenticated()
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
 
