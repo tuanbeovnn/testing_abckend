@@ -41,12 +41,12 @@ public class UserEntity {
     @Column(nullable = false)
     private Boolean active;
 
-    
+
     public void activate() {
-		this.active = true;
-	}
-	
-	public void deactivate() {
-		this.active = false;
-	}
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
+    }
 }
