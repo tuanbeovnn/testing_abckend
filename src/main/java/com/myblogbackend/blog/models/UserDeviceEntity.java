@@ -1,23 +1,19 @@
 package com.myblogbackend.blog.models;
 
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "user_device")
 public class UserDeviceEntity {
 
-	@Id
+    @Id
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_device_seq")
     @SequenceGenerator(name = "user_device_seq", allocationSize = 1)
