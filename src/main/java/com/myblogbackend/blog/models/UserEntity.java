@@ -1,13 +1,10 @@
 package com.myblogbackend.blog.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.myblogbackend.blog.enums.OAuth2Provider;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,6 +37,9 @@ public class UserEntity {
 
     @Column(nullable = false)
     private Boolean active;
+    @Column(name = "provider")
+    @Enumerated(EnumType.STRING)
+    private OAuth2Provider provider;
 
 
     public void activate() {
