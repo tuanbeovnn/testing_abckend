@@ -1,4 +1,4 @@
-CREATE TABLE user_device (
+CREATE TABLE blog_dev.user_device (
     id                serial PRIMARY KEY,
     user_id           integer NOT NULL REFERENCES users(id),
     device_type       varchar(255),

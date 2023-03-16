@@ -1,0 +1,17 @@
+# docker run --name blog-dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=blog_dev -d postgres
+
+spring:
+  main:
+    banner-mode: off
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/blog_dev?currentSchema=blog_dev
+    username: postgres
+    password: postgres

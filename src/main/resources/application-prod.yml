@@ -1,0 +1,15 @@
+spring:
+  main:
+    banner-mode: off
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://bienhoa.cf:5432/blog_dev?useSSL=false&currentSchema=blog_dev
+    username: dev
+    password: P@ssword*123

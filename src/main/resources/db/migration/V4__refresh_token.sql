@@ -1,4 +1,4 @@
-CREATE TABLE refresh_token (
+CREATE TABLE blog_dev.refresh_token (
     id              serial PRIMARY KEY,
     token           varchar(255) NOT NULL UNIQUE,
     user_device_id  integer NOT NULL UNIQUE REFERENCES user_device(id),
