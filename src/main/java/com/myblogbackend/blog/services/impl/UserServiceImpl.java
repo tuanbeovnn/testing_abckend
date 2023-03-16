@@ -44,17 +44,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfile findUserById(Long id) {
-        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
-        UserEntity userEntity = usersRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        var userEntity = getUserById(id);
         return new UserProfile(userEntity.getId(), userEntity.getEmail(), userEntity.getName(), userEntity.getActive());
     }
 
     @Override
     public UserProfile aboutMe() {
         var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
-        UserEntity userEntity = usersRepository.findById(signedInUser.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", signedInUser.getId()));
+        var userEntity = getUserById(signedInUser.getId());
         return new UserProfile(userEntity.getId(), userEntity.getEmail(), userEntity.getName(), userEntity.getActive());
+    }
+
+    private UserEntity getUserById(Long id) {
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 }

@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
         userEntity.setPassword(encoder.encode(signUpRequest.getPassword()));
         userEntity.activate();
         UserEntity result = usersRepository.save(userEntity);
-        return userMapper.toUserDTO(userEntity);
+        return userMapper.toUserDTO(result);
     }
 
     @Override
