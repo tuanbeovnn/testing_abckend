@@ -13,6 +13,7 @@ import com.myblogbackend.blog.response.JwtResponse;
 import com.myblogbackend.blog.security.JwtProvider;
 import com.myblogbackend.blog.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     public static final long ONE_HOUR_IN_MILLIS = 3600000;
@@ -35,22 +37,6 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
-
-    public AuthServiceImpl(UsersRepository usersRepository,
-                           AuthenticationManager authenticationManager,
-                           JwtProvider jwtProvider,
-                           UserDeviceRepository userDeviceRepository,
-                           RefreshTokenRepository refreshTokenRepository,
-                           PasswordEncoder encoder,
-                           UserMapper userMapper) {
-        this.usersRepository = usersRepository;
-        this.authenticationManager = authenticationManager;
-        this.jwtProvider = jwtProvider;
-        this.userDeviceRepository = userDeviceRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.encoder = encoder;
-        this.userMapper = userMapper;
-    }
 
     @Override
     public JwtResponse userLogin(LoginForm loginRequest) {

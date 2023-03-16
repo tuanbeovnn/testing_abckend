@@ -11,24 +11,17 @@ import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.response.UserProfile;
 import com.myblogbackend.blog.services.UserService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDeviceRepository userDeviceRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final UsersRepository usersRepository;
-
-    public UserServiceImpl(UserDeviceRepository userDeviceRepository,
-                           RefreshTokenRepository refreshTokenRepository,
-                           ApplicationEventPublisher applicationEventPublisher, UsersRepository usersRepository) {
-        this.userDeviceRepository = userDeviceRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.usersRepository = usersRepository;
-    }
 
     @Override
     public void logoutUser(LogOutRequest logOutRequest, UserPrincipal currentUser) {
