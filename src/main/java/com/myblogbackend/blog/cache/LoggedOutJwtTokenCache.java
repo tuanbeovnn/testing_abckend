@@ -1,23 +1,20 @@
 package com.myblogbackend.blog.cache;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import com.myblogbackend.blog.event.OnUserLogoutSuccessEvent;
 import com.myblogbackend.blog.security.JwtProvider;
+import net.jodah.expiringmap.ExpiringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-import net.jodah.expiringmap.ExpiringMap;
+import java.time.Instant;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class LoggedOutJwtTokenCache {
-	private static final Logger logger = LoggerFactory.getLogger(LoggedOutJwtTokenCache.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(LoggedOutJwtTokenCache.class);
     private ExpiringMap<String, OnUserLogoutSuccessEvent> tokenEventMap;
     private JwtProvider tokenProvider;
 

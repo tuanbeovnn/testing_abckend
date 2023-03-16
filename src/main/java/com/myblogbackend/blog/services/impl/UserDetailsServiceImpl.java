@@ -1,5 +1,4 @@
-package com.myblogbackend.blog.services;
-
+package com.myblogbackend.blog.services.impl;
 
 
 import com.myblogbackend.blog.models.UserEntity;
@@ -12,23 +11,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UsersRepository usersRepository;
- 
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-      
+
         UserEntity userEntity = usersRepository.findByEmail(username)
-                  .orElseThrow(() -> 
+                .orElseThrow(() ->
                         new UsernameNotFoundException("User Not Found with -> username or email : " + username)
-        );
- 
+                );
+
         return UserPrincipal.build(userEntity);
     }
 }

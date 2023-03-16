@@ -2,7 +2,7 @@ package com.myblogbackend.blog.config;
 
 import com.myblogbackend.blog.security.JwtAuthenticationEntryPoint;
 import com.myblogbackend.blog.security.JwtAuthenticationFilter;
-import com.myblogbackend.blog.services.UserDetailsServiceImpl;
+import com.myblogbackend.blog.services.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

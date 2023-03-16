@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.services;
+package com.myblogbackend.blog.services.impl;
 
 import com.myblogbackend.blog.dtos.*;
 import com.myblogbackend.blog.exception.TokenRefreshException;
@@ -11,7 +11,7 @@ import com.myblogbackend.blog.repositories.UserDeviceRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.response.JwtResponse;
 import com.myblogbackend.blog.security.JwtProvider;
-import com.myblogbackend.blog.services.impl.AuthService;
+import com.myblogbackend.blog.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

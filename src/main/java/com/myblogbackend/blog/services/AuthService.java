@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.services.impl;
+package com.myblogbackend.blog.services;
 
 import com.myblogbackend.blog.dtos.LoginForm;
 import com.myblogbackend.blog.dtos.SignUpForm;
@@ -11,5 +11,6 @@ public interface AuthService {
     JwtResponse userLogin(LoginForm loginFormRequest);
 
     UserResponse registerUser(SignUpForm signUpRequest, HttpServletRequest request);
+
     JwtResponse refreshJwtToken(TokenRefreshRequest tokenRefreshRequest);
 }

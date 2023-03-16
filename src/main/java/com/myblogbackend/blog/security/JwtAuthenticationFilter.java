@@ -3,7 +3,7 @@ package com.myblogbackend.blog.security;
 import java.io.IOException;
 
 
-import com.myblogbackend.blog.services.UserDetailsServiceImpl;
+import com.myblogbackend.blog.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

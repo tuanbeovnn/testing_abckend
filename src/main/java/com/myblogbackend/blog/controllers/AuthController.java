@@ -4,7 +4,7 @@ import com.myblogbackend.blog.dtos.LoginForm;
 import com.myblogbackend.blog.dtos.SignUpForm;
 import com.myblogbackend.blog.dtos.TokenRefreshRequest;
 import com.myblogbackend.blog.response.ApiResponse;
-import com.myblogbackend.blog.services.impl.AuthService;
+import com.myblogbackend.blog.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
