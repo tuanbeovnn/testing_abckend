@@ -15,8 +15,7 @@ public class UserDeviceEntity {
 
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_device_seq")
-    @SequenceGenerator(name = "user_device_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
