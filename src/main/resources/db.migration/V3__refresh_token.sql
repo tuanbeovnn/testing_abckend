@@ -1,9 +1,7 @@
-CREATE TABLE refresh_token
-(
-    id             int          NOT NULL AUTO_INCREMENT,
-    token          varchar(255) NOT NULL UNIQUE,
-    refresh_count  BIGINT,
-    expiry_dt      date,
-    PRIMARY KEY (id)
+CREATE TABLE refresh_token (
+    id              serial PRIMARY KEY,
+    token           varchar(255) NOT NULL UNIQUE,
+    user_device_id  integer NOT NULL UNIQUE REFERENCES user_device(id),
+    refresh_count   bigint DEFAULT 0,
+    expiry_dt       timestamp NOT NULL
 );
-ALTER TABLE refresh_token ADD FOREIGN KEY (id) REFERENCES  user_device(id);
