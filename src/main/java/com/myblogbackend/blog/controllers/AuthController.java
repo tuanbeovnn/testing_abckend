@@ -1,8 +1,8 @@
 package com.myblogbackend.blog.controllers;
 
-import com.myblogbackend.blog.dtos.LoginForm;
-import com.myblogbackend.blog.dtos.SignUpForm;
-import com.myblogbackend.blog.dtos.TokenRefreshRequest;
+import com.myblogbackend.blog.request.LoginFormRequest;
+import com.myblogbackend.blog.request.SignUpFormRequest;
+import com.myblogbackend.blog.request.TokenRefreshRequest;
 import com.myblogbackend.blog.response.ApiResponse;
 import com.myblogbackend.blog.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginFormRequest loginRequest) {
         var jwtResponse = authService.userLogin(loginRequest);
         if (Objects.isNull(jwtResponse)) {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "User has been deactivated/locked !!"));
@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest, HttpServletRequest request) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpFormRequest signUpRequest, HttpServletRequest request) {
         var newUser = authService.registerUser(signUpRequest, request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/user/me")

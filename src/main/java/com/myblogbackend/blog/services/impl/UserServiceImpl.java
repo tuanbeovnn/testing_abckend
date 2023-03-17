@@ -1,6 +1,7 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.dtos.LogOutRequest;
+import com.myblogbackend.blog.request.LogOutRequest;
+import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.event.OnUserLogoutSuccessEvent;
 import com.myblogbackend.blog.exception.ResourceNotFoundException;
 import com.myblogbackend.blog.exception.UserLogoutException;
@@ -8,7 +9,7 @@ import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.repositories.RefreshTokenRepository;
 import com.myblogbackend.blog.repositories.UserDeviceRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
-import com.myblogbackend.blog.response.UserProfile;
+import com.myblogbackend.blog.security.UserPrincipal;
 import com.myblogbackend.blog.services.UserService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,16 +37,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfile findUserById(Long id) {
+    public UserResponse findUserById(Long id) {
         var userEntity = getUserById(id);
-        return new UserProfile(userEntity.getId(), userEntity.getEmail(), userEntity.getName(), userEntity.getActive());
+        return new UserResponse(userEntity.getId(), userEntity.getEmail(), userEntity.getName());
     }
 
     @Override
-    public UserProfile aboutMe() {
+    public UserResponse aboutMe() {
         var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
         var userEntity = getUserById(signedInUser.getId());
-        return new UserProfile(userEntity.getId(), userEntity.getEmail(), userEntity.getName(), userEntity.getActive());
+        return new UserResponse(userEntity.getId(), userEntity.getEmail(), userEntity.getName());
     }
 
     private UserEntity getUserById(Long id) {

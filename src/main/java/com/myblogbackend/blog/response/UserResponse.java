@@ -1,19 +1,17 @@
 package com.myblogbackend.blog.response;
 
-import java.time.Instant;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class UserProfile {
+public class UserResponse {
     private Long id;
     private String email;
     private String name;
-    private Boolean active;
+
 }

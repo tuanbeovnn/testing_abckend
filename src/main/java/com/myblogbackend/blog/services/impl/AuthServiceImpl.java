@@ -1,6 +1,6 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.dtos.*;
+import com.myblogbackend.blog.request.*;
 import com.myblogbackend.blog.exception.TokenRefreshException;
 import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.RefreshTokenEntity;
@@ -10,6 +10,7 @@ import com.myblogbackend.blog.repositories.RefreshTokenRepository;
 import com.myblogbackend.blog.repositories.UserDeviceRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.response.JwtResponse;
+import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.JwtProvider;
 import com.myblogbackend.blog.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     @Override
-    public JwtResponse userLogin(LoginForm loginRequest) {
+    public JwtResponse userLogin(LoginFormRequest loginRequest) {
         var userEntity = usersRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User not found."));
 
@@ -51,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
         return new JwtResponse(jwtToken, refreshTokenEntity.getToken(), jwtProvider.getExpiryDuration());
     }
 
-    private RefreshTokenEntity createRefreshToken(LoginForm loginRequest, UserEntity userEntity) {
+    private RefreshTokenEntity createRefreshToken(LoginFormRequest loginRequest, UserEntity userEntity) {
         userDeviceRepository.findByUserId(userEntity.getId())
                 .map(UserDeviceEntity::getRefreshToken)
                 .map(RefreshTokenEntity::getId)
@@ -67,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse registerUser(SignUpForm signUpRequest, HttpServletRequest request) {
+    public UserResponse registerUser(SignUpFormRequest signUpRequest, HttpServletRequest request) {
         var userEntity = usersRepository.findByEmail(signUpRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail -> Email is already in use!"));
         // Creating user's account
@@ -115,10 +116,10 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.save(refreshTokenEntity);
     }
 
-    public UserDeviceEntity createUserDevice(DeviceInfo deviceInfo) {
+    public UserDeviceEntity createUserDevice(DeviceInfoRequest deviceInfoRequest) {
         return UserDeviceEntity.builder()
-                .deviceId(deviceInfo.getDeviceId())
-                .deviceType(deviceInfo.getDeviceType())
+                .deviceId(deviceInfoRequest.getDeviceId())
+                .deviceType(deviceInfoRequest.getDeviceType())
                 .isRefreshActive(true)
                 .build();
     }
@@ -131,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    private Authentication authenticateUser(LoginForm loginRequest) {
+    private Authentication authenticateUser(LoginFormRequest loginRequest) {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),

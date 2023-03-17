@@ -1,7 +1,7 @@
 package com.myblogbackend.blog.event;
 
 import com.myblogbackend.blog.cache.LoggedOutJwtTokenCache;
-import com.myblogbackend.blog.dtos.DeviceInfo;
+import com.myblogbackend.blog.request.DeviceInfoRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class OnUserLogoutSuccessEventListener implements ApplicationListener<OnU
 
     public void onApplicationEvent(OnUserLogoutSuccessEvent event) {
         if (null != event) {
-            DeviceInfo deviceInfo = event.getLogOutRequest().getDeviceInfo();
-            logger.info(String.format("Log out success event received for user [%s] for device [%s]", event.getUserEmail(), deviceInfo));
+            DeviceInfoRequest deviceInfoRequest = event.getLogOutRequest().getDeviceInfo();
+            logger.info(String.format("Log out success event received for user [%s] for device [%s]", event.getUserEmail(), deviceInfoRequest));
             tokenCache.markLogoutEventForToken(event);
         }
     }

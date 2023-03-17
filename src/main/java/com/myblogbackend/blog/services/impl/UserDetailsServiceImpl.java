@@ -3,6 +3,7 @@ package com.myblogbackend.blog.services.impl;
 
 import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.repositories.UsersRepository;
+import com.myblogbackend.blog.security.UserPrincipal;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

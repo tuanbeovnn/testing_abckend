@@ -4,7 +4,6 @@ import com.myblogbackend.blog.cache.LoggedOutJwtTokenCache;
 import com.myblogbackend.blog.event.OnUserLogoutSuccessEvent;
 import com.myblogbackend.blog.exception.InvalidTokenRequestException;
 import com.myblogbackend.blog.models.UserEntity;
-import com.myblogbackend.blog.services.impl.UserPrincipal;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

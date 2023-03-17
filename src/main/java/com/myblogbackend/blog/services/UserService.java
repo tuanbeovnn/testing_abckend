@@ -1,13 +1,13 @@
 package com.myblogbackend.blog.services;
 
-import com.myblogbackend.blog.dtos.LogOutRequest;
-import com.myblogbackend.blog.response.UserProfile;
-import com.myblogbackend.blog.services.impl.UserPrincipal;
+import com.myblogbackend.blog.request.LogOutRequest;
+import com.myblogbackend.blog.response.UserResponse;
+import com.myblogbackend.blog.security.UserPrincipal;
 
 public interface UserService {
     void logoutUser(LogOutRequest logOutRequest, UserPrincipal userPrincipal);
 
-    UserProfile findUserById(Long id);
+    UserResponse findUserById(Long id);
 
-    UserProfile aboutMe();
+    UserResponse aboutMe();
 }

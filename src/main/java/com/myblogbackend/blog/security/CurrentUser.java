@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.services;
+package com.myblogbackend.blog.security;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

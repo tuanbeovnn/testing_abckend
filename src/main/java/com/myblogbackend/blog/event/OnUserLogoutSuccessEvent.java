@@ -3,7 +3,7 @@ package com.myblogbackend.blog.event;
 import java.time.Instant;
 import java.util.Date;
 
-import com.myblogbackend.blog.dtos.LogOutRequest;
+import com.myblogbackend.blog.request.LogOutRequest;
 import org.springframework.context.ApplicationEvent;
 
 

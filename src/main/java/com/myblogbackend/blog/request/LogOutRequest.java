@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.dtos;
+package com.myblogbackend.blog.request;
 
 
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ public class LogOutRequest {
 
     @Valid
     @NotNull(message = "Device info cannot be null")
-    private DeviceInfo deviceInfo;
+    private DeviceInfoRequest deviceInfo;
     
     @Valid
     @NotNull(message = "Existing Token needs to be passed")

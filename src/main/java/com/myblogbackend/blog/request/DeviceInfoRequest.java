@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.dtos;
+package com.myblogbackend.blog.request;
 
 
 
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class DeviceInfo {
+public class DeviceInfoRequest {
 
     @NotBlank(message = "Device id cannot be blank")
     private String deviceId;

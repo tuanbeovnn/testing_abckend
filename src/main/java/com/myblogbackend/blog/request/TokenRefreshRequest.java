@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.dtos;
+package com.myblogbackend.blog.request;
 
 
 
