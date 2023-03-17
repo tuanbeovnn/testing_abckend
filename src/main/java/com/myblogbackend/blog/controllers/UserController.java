@@ -1,5 +1,7 @@
 package com.myblogbackend.blog.controllers;
 
+import com.myblogbackend.blog.controllers.route.CommonRoutes;
+import com.myblogbackend.blog.controllers.route.UserRoutes;
 import com.myblogbackend.blog.request.LogOutRequest;
 import com.myblogbackend.blog.response.ApiResponse;
 import com.myblogbackend.blog.response.UserResponse;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + UserRoutes.BASE_URL)
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;

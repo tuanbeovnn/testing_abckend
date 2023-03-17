@@ -1,5 +1,7 @@
 package com.myblogbackend.blog.controllers;
 
+import com.myblogbackend.blog.controllers.route.AuthRoutes;
+import com.myblogbackend.blog.controllers.route.CommonRoutes;
 import com.myblogbackend.blog.request.LoginFormRequest;
 import com.myblogbackend.blog.request.SignUpFormRequest;
 import com.myblogbackend.blog.request.TokenRefreshRequest;
@@ -19,7 +21,7 @@ import java.net.URI;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + AuthRoutes.BASE_URL)
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
