@@ -20,7 +20,7 @@ public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
-    private LoggedOutJwtTokenCache loggedOutJwtTokenCache;
+    private final LoggedOutJwtTokenCache loggedOutJwtTokenCache;
 
     public JwtProvider(@Lazy LoggedOutJwtTokenCache loggedOutJwtTokenCache) {
         this.loggedOutJwtTokenCache = loggedOutJwtTokenCache;

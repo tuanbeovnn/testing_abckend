@@ -46,6 +46,13 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -57,6 +64,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
+                .requestMatchers(AUTH_WHITELIST).permitAll()
                 .requestMatchers("/",
                         "/favicon.ico",
                         "/**/*.json",
@@ -75,10 +83,8 @@ public class WebSecurityConfig {
                         "/**/*.jpeg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js",
-                        "/swagger-ui/**",
-                        "/v3/**",
-                        "/swagger-ui.html").permitAll()
+                        "/**/*.js"
+                       ).permitAll()
                 .requestMatchers("/api/v1/**").permitAll()
                 .requestMatchers("/user/api/v1/auth/**").permitAll()
                 .requestMatchers("/user/api/v1/core/**").permitAll()
@@ -89,8 +95,6 @@ public class WebSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
-
     }
 
 }

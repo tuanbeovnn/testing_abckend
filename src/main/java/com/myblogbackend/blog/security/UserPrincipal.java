@@ -5,22 +5,24 @@ import com.myblogbackend.blog.models.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
 public class UserPrincipal implements UserDetails {
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private final Long id;
 
-    private String name;
+    private final String name;
 
-    private String email;
+    private final String email;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
     private Map<String, Object> attributes;
 
