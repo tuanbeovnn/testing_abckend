@@ -1,6 +1,7 @@
 package com.myblogbackend.blog.models;
 
 
+import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @Entity
 @Builder
 @Table(name = "user_device")
-public class UserDeviceEntity {
+public class UserDeviceEntity extends BaseEntity {
 
     @Id
     @Column

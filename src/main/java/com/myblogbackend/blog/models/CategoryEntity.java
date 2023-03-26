@@ -1,7 +1,7 @@
 package com.myblogbackend.blog.models;
 
+import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryEntity {
-
+public class CategoryEntity extends BaseEntity {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY

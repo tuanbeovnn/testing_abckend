@@ -3,6 +3,7 @@ package com.myblogbackend.blog.models;
 import java.time.Instant;
 
 
+import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import lombok.*;
 @Setter
 @Builder
 @Table(name = "refresh_token")
-public class RefreshTokenEntity {
+public class RefreshTokenEntity extends BaseEntity {
 
 	@Id
     @Column

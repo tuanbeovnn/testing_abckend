@@ -1,14 +1,11 @@
 package com.myblogbackend.blog.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "posts")
@@ -16,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostEntity {
+public class PostEntity extends BaseEntity {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
