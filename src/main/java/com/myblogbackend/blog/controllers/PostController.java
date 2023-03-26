@@ -21,20 +21,20 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPostById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getPostById(final @PathVariable(value = "id") Long id) {
         var post = postService.getPostById(id);
         return ResponseEntity.ok(post);
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<?> getAllPostsByCategoryId(@PathVariable(value = "categoryId") Long categoryId) {
+    public ResponseEntity<?> getAllPostsByCategoryId(final @PathVariable(value = "categoryId") Long categoryId) {
         var postList = postService.getAllPostsByCategoryId(categoryId);
         return ResponseEntity.ok(postList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable(value = "id") Long id,
-                                        PostRequest postRequest) {
+    public ResponseEntity<?> updatePost(final @PathVariable(value = "id") Long id,
+                                        final PostRequest postRequest) {
         var post = postService.updatePost(id, postRequest);
         return ResponseEntity.ok(post);
     }

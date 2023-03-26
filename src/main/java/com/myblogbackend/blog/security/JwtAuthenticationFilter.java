@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
 			String jwt = getJwt(request);
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private String getJwt(HttpServletRequest request) {
+	private String getJwt(final HttpServletRequest request) {
 		String authHeader = request.getHeader("Authorization");
 
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {

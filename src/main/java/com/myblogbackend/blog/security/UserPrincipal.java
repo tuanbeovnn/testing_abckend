@@ -26,15 +26,15 @@ public class UserPrincipal implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String name,
-                         String email, String password) {
+    public UserPrincipal(final Long id, final String name,
+                         final String email, final String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public static UserPrincipal build(UserEntity userEntity) {
+    public static UserPrincipal build(final UserEntity userEntity) {
         return new UserPrincipal(
                 userEntity.getId(),
                 userEntity.getName(),
@@ -91,7 +91,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -103,7 +103,7 @@ public class UserPrincipal implements UserDetails {
         return attributes;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
+    public void setAttributes(final Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 }

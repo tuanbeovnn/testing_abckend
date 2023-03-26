@@ -22,11 +22,11 @@ public class JwtProvider {
 
     private final LoggedOutJwtTokenCache loggedOutJwtTokenCache;
 
-    public JwtProvider(@Lazy LoggedOutJwtTokenCache loggedOutJwtTokenCache) {
+    public JwtProvider(final @Lazy LoggedOutJwtTokenCache loggedOutJwtTokenCache) {
         this.loggedOutJwtTokenCache = loggedOutJwtTokenCache;
     }
 
-    public String generateJwtToken(Authentication authentication) {
+    public String generateJwtToken(final Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
@@ -43,7 +43,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateTokenFromUser(UserEntity userEntity) {
+    public String generateTokenFromUser(final UserEntity userEntity) {
         Instant expiryDate = Instant.now().plusMillis(3600000);
         return Jwts.builder()
                 .setSubject(userEntity.getEmail())
@@ -55,14 +55,14 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    public String getUserNameFromJwtToken(final String token) {
         return Jwts.parser()
                 .setSigningKey("HelloWorld")
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
 
-    public Date getTokenExpiryFromJWT(String token) {
+    public Date getTokenExpiryFromJWT(final String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey("HelloWorld")
                 .parseClaimsJws(token)
@@ -71,7 +71,7 @@ public class JwtProvider {
         return claims.getExpiration();
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateJwtToken(final String authToken) {
         try {
             Jwts.parser().setSigningKey("HelloWorld").parseClaimsJws(authToken);
             validateTokenIsNotForALoggedOutDevice(authToken);
@@ -89,7 +89,7 @@ public class JwtProvider {
         return false;
     }
 
-    private void validateTokenIsNotForALoggedOutDevice(String authToken) {
+    private void validateTokenIsNotForALoggedOutDevice(final String authToken) {
         OnUserLogoutSuccessEvent previouslyLoggedOutEvent = loggedOutJwtTokenCache.getLogoutEventForToken(authToken);
         if (previouslyLoggedOutEvent != null) {
             String userEmail = previouslyLoggedOutEvent.getUserEmail();

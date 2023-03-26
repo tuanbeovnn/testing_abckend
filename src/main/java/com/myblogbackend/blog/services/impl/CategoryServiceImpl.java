@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse getCategoryById(Long id) {
+    public CategoryResponse getCategoryById(final Long id) {
         var category = categoryRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
@@ -32,14 +32,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse createCategory(CategoryRequest categoryRequest) {
+    public CategoryResponse createCategory(final CategoryRequest categoryRequest) {
         var category = categoryMapper.toCategoryEntityFromCategoryRequest(categoryRequest);
         var createdCategory = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(createdCategory);
     }
 
     @Override
-    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
+    public CategoryResponse updateCategory(final Long id, final CategoryRequest categoryRequest) {
         var category = categoryRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));

@@ -25,7 +25,7 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     @Override
-    public PostResponse createPost(PostRequest postRequest) {
+    public PostResponse createPost(final PostRequest postRequest) {
         var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
         var category = validateCategory(postRequest.getCategoryId());
         var postEntity = postMapper.toPostEntity(postRequest);
@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getAllPostsByCategoryId(Long categoryId) {
+    public List<PostResponse> getAllPostsByCategoryId(final Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
         }
@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getPostById(Long id) {
+    public PostResponse getPostById(final Long id) {
         var post = postRepository
                 .findById(id)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostResponse updatePost(Long id, PostRequest postRequest) {
+    public PostResponse updatePost(final Long id, final PostRequest postRequest) {
         var post = postRepository.findById(id)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
         var category = validateCategory(postRequest.getCategoryId());
@@ -72,7 +72,7 @@ public class PostServiceImpl implements PostService {
         return postMapper.toPostResponse(updatedPost);
     }
 
-    private CategoryEntity validateCategory(Long categoryId) {
+    private CategoryEntity validateCategory(final Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
     }

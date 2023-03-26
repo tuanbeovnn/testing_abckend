@@ -4,37 +4,37 @@ public class LangException extends BlogExeption {
     private String lang;
     private Object[] translateArgs;
 
-    public LangException(BlogExceptionResponse resultCode, Object... translateArgs) {
+    public LangException(final BlogExceptionResponse resultCode, final Object... translateArgs) {
         super(resultCode);
         this.translateArgs = translateArgs;
     }
 
-    public LangException(BlogExceptionResponse resultCode, Throwable throwable, Object... translateArgs) {
+    public LangException(final BlogExceptionResponse resultCode, final Throwable throwable, final Object... translateArgs) {
         super(resultCode, throwable);
         this.translateArgs = translateArgs;
     }
 
-    public LangException(String lang, BlogExceptionResponse resultCode) {
+    public LangException(final String lang, final BlogExceptionResponse resultCode) {
         super(resultCode);
         this.lang = lang;
     }
 
-    public LangException(String lang, BlogExceptionResponse resultCode, Throwable throwable) {
+    public LangException(final String lang, final BlogExceptionResponse resultCode, final Throwable throwable) {
         super(resultCode, throwable);
         this.lang = lang;
     }
 
-    public LangException(BlogExceptionResponse resultCode, Throwable throwable) {
+    public LangException(final BlogExceptionResponse resultCode, final Throwable throwable) {
         super(resultCode, throwable);
     }
 
-    public LangException(String lang, BlogExceptionResponse resultCode, Object... translateArgs) {
+    public LangException(final String lang, final BlogExceptionResponse resultCode, final Object... translateArgs) {
         super(resultCode);
         this.lang = lang;
         this.translateArgs = translateArgs;
     }
 
-    public LangException(String lang, BlogExceptionResponse resultCode, Throwable throwable, Object... translateArgs) {
+    public LangException(final String lang, final BlogExceptionResponse resultCode, final Throwable throwable, final Object... translateArgs) {
         super(resultCode, throwable);
         this.lang = lang;
         this.translateArgs = translateArgs;
@@ -45,7 +45,7 @@ public class LangException extends BlogExeption {
         return var10000 + ", instance: " + this.toString();
     }
 
-    public void setTranslateArgs(Object... translateArgs) {
+    public void setTranslateArgs(final Object... translateArgs) {
         this.translateArgs = translateArgs;
     }
 

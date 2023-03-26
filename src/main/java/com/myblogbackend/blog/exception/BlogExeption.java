@@ -1,18 +1,19 @@
 package com.myblogbackend.blog.exception;
 
 public class BlogExeption extends RuntimeException {
-    protected BlogExceptionResponse resultCode;
+    private BlogExceptionResponse resultCode;
 
-    public BlogExeption(String message) {
+    public BlogExeption(final String message, final BlogExceptionResponse resultCode) {
         super(message);
+        this.resultCode = resultCode;
     }
 
-    public BlogExeption(BlogExceptionResponse resultCode) {
+    public BlogExeption(final BlogExceptionResponse resultCode) {
         super(resultCode.toString());
         this.resultCode = resultCode;
     }
 
-    public BlogExeption(BlogExceptionResponse resultCode, Throwable throwable) {
+    public BlogExeption(final BlogExceptionResponse resultCode, final Throwable throwable) {
         super(throwable);
         this.resultCode = resultCode;
     }
@@ -26,7 +27,7 @@ public class BlogExeption extends RuntimeException {
         return this.resultCode;
     }
 
-    public void setPezzieExceptionResponse(BlogExceptionResponse resultCode) {
+    public void setPezzieExceptionResponse(final BlogExceptionResponse resultCode) {
         this.resultCode = resultCode;
     }
 }
