@@ -15,9 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryEntity extends BaseEntity {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String name;
