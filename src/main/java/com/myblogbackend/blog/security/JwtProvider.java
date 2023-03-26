@@ -19,6 +19,9 @@ import java.util.Date;
 public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    public static final String ISSUER_GENERATE_TOKEN = "StackAbuse";
+    public static final String ISSUER_GENERATE_REFRESH_TOKEN = "Therapex";
+    public static final String SIGNING_KEY = "HelloWorld";
 
     private final LoggedOutJwtTokenCache loggedOutJwtTokenCache;
 
@@ -35,11 +38,11 @@ public class JwtProvider {
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
-                .setIssuer("StackAbuse")
+                .setIssuer(ISSUER_GENERATE_TOKEN)
                 .setId(String.valueOf(userPrincipal.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, "HelloWorld")
+                .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
     }
 
@@ -47,24 +50,24 @@ public class JwtProvider {
         Instant expiryDate = Instant.now().plusMillis(3600000);
         return Jwts.builder()
                 .setSubject(userEntity.getEmail())
-                .setIssuer("Therapex")
+                .setIssuer(ISSUER_GENERATE_REFRESH_TOKEN)
                 .setId(String.valueOf(userEntity.getId()))
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(expiryDate))
-                .signWith(SignatureAlgorithm.HS512, "HelloWorld")
+                .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
     }
 
     public String getUserNameFromJwtToken(final String token) {
         return Jwts.parser()
-                .setSigningKey("HelloWorld")
+                .setSigningKey(SIGNING_KEY)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
 
     public Date getTokenExpiryFromJWT(final String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey("HelloWorld")
+                .setSigningKey(SIGNING_KEY)
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -73,7 +76,7 @@ public class JwtProvider {
 
     public boolean validateJwtToken(final String authToken) {
         try {
-            Jwts.parser().setSigningKey("HelloWorld").parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(SIGNING_KEY).parseClaimsJws(authToken);
             validateTokenIsNotForALoggedOutDevice(authToken);
             return true;
         } catch (MalformedJwtException e) {
@@ -94,7 +97,8 @@ public class JwtProvider {
         if (previouslyLoggedOutEvent != null) {
             String userEmail = previouslyLoggedOutEvent.getUserEmail();
             Date logoutEventDate = previouslyLoggedOutEvent.getEventTime();
-            String errorMessage = String.format("Token corresponds to an already logged out user [%s] at [%s]. Please login again", userEmail, logoutEventDate);
+            String errorMessage = String.format("Token corresponds to an already logged out user [%s] at [%s]. Please login again",
+                    userEmail, logoutEventDate);
             throw new InvalidTokenRequestException("JWT", authToken, errorMessage);
         }
     }
