@@ -2,10 +2,8 @@ package com.myblogbackend.blog.services.impl;
 
 import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.exception.BlogLangException;
-import com.myblogbackend.blog.exception.ResourceNotFoundException;
 import com.myblogbackend.blog.mapper.PostMapper;
 import com.myblogbackend.blog.models.CategoryEntity;
-import com.myblogbackend.blog.models.PostEntity;
 import com.myblogbackend.blog.repositories.CategoryRepository;
 import com.myblogbackend.blog.repositories.PostRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
@@ -17,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +69,7 @@ public class PostServiceImpl implements PostService {
         post.setContent(postRequest.getContent());
         post.setCategory(category);
         var updatedPost = postRepository.save(post);
-        return postMapper.toPostResponse(post);
+        return postMapper.toPostResponse(updatedPost);
     }
 
     private CategoryEntity validateCategory(Long categoryId) {
