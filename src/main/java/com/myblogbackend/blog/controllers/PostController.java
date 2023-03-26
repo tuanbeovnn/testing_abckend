@@ -18,8 +18,7 @@ import java.util.List;
 @RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + PostRoutes.BASE_URL)
 @RequiredArgsConstructor
 public class PostController {
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
     @GetMapping()
     public ResponseEntity<?> getAllPosts() {

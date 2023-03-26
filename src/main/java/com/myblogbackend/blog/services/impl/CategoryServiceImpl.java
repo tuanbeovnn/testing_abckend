@@ -27,13 +27,13 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     @Override
     public List<CategoryResponse> getAllCategories() {
-        List<CategoryEntity> categoryList = categoryRepository.findAll();
+        var categoryList = categoryRepository.findAll();
         return categoryMapper.toListCategoryResponse(categoryList);
     }
 
     @Override
     public CategoryResponse getCategoryById(Long id) {
-        CategoryEntity category = categoryRepository
+        var category = categoryRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
         return categoryMapper.toCategoryResponse(category);
@@ -41,18 +41,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
-        CategoryEntity category = categoryMapper.toCategoryEntityFromCategoryRequest(categoryRequest);
-        categoryRepository.save(category);
+        var category = categoryMapper.toCategoryEntityFromCategoryRequest(categoryRequest);
+        var createdCategory = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(category);
     }
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
-        CategoryEntity category = categoryRepository
+        var category = categoryRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
         category.setName(categoryRequest.getName());
-        categoryRepository.save(category);
+        var updatedCategory = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(category);
     }
 }

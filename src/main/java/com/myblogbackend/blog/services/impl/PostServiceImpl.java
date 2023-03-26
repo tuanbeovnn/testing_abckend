@@ -35,13 +35,13 @@ public class PostServiceImpl implements PostService {
         postEntity.setCategory(category);
         // populate owner
         postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
-        var createdCompany = postRepository.save(postEntity);
-        return postMapper.toPostResponse(createdCompany);
+        var createdPost = postRepository.save(postEntity);
+        return postMapper.toPostResponse(createdPost);
     }
 
     @Override
     public List<PostResponse> getAllPosts() {
-        List<PostEntity> postEntities = postRepository.findAll();
+        var postEntities = postRepository.findAll();
         return postMapper.toListPostResponse(postEntities);
     }
 
@@ -50,13 +50,13 @@ public class PostServiceImpl implements PostService {
         if (!categoryRepository.existsById(categoryId)) {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
         }
-        List<PostEntity> posts = postRepository.findByCategoryId(categoryId);
+        var posts = postRepository.findByCategoryId(categoryId);
         return postMapper.toListPostResponse(posts);
     }
 
     @Override
     public PostResponse getPostById(Long id) {
-        PostEntity post = postRepository
+        var post = postRepository
                 .findById(id)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
         return postMapper.toPostResponse(post);
@@ -65,13 +65,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse updatePost(Long id, PostRequest postRequest) {
-        PostEntity post = postRepository.findById(id)
+        var post = postRepository.findById(id)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
         var category = validateCategory(postRequest.getCategoryId());
         post.setTitle(postRequest.getTitle());
         post.setContent(postRequest.getContent());
         post.setCategory(category);
-        postRepository.save(post);
+        var updatedPost = postRepository.save(post);
         return postMapper.toPostResponse(post);
     }
 

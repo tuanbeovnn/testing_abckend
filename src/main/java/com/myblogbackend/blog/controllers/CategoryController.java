@@ -18,8 +18,7 @@ import java.util.List;
 @RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + CategoryRoutes.BASE_URL)
 @RequiredArgsConstructor
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping()
     public ResponseEntity<?> getAllCategories() {
