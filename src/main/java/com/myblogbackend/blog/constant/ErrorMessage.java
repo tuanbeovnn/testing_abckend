@@ -9,7 +9,9 @@ public enum ErrorMessage {
     ACTION_IS_NULL(405, "error.action-not-null"),
     SAVE_FAIL(406, "error.save-fail"),
     MAX_QUANTITY_UPLOAD(407, "error.max-file-request"),
+    NOT_FOUND(404, "error.not_found"),
     USER_NOT_AUTHORIZATION(401, "error.not_authorization");
+
     private final BlogExceptionResponse resultCode;
 
     ErrorMessage(int code, String message) {

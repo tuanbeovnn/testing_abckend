@@ -1,14 +1,15 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.request.LogOutRequest;
-import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.event.OnUserLogoutSuccessEvent;
 import com.myblogbackend.blog.exception.ResourceNotFoundException;
 import com.myblogbackend.blog.exception.UserLogoutException;
+import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.repositories.RefreshTokenRepository;
 import com.myblogbackend.blog.repositories.UserDeviceRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
+import com.myblogbackend.blog.request.LogOutRequest;
+import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.UserPrincipal;
 import com.myblogbackend.blog.services.UserService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final UsersRepository usersRepository;
+
+    private final UserMapper userMapper;
 
     @Override
     public void logoutUser(LogOutRequest logOutRequest, UserPrincipal currentUser) {
@@ -39,14 +42,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse findUserById(Long id) {
         var userEntity = getUserById(id);
-        return new UserResponse(userEntity.getId(), userEntity.getEmail(), userEntity.getName());
+        return userMapper.toUserDTO(userEntity);
     }
 
     @Override
     public UserResponse aboutMe() {
         var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
         var userEntity = getUserById(signedInUser.getId());
-        return new UserResponse(userEntity.getId(), userEntity.getEmail(), userEntity.getName());
+        return userMapper.toUserDTO(userEntity);
     }
 
     private UserEntity getUserById(Long id) {

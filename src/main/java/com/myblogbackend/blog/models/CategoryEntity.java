@@ -21,6 +21,5 @@ public class CategoryEntity {
     )
     private Long id;
     @Column
-    @NotBlank(message = "category name cannot be null")
     private String name;
 }

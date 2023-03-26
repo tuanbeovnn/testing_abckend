@@ -24,15 +24,12 @@ public class PostEntity {
     private Long id;
 
     @Column
-    @NotBlank(message = "title cannot be null")
     private String title;
 
     @Column
-    @NotBlank(message = "content cannot be null")
     private String content;
 
     @Column
-    @NotBlank(message = "approved cannot be null")
     private Boolean approved;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,4 +39,7 @@ public class PostEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id" )
     private UserEntity user;
+    public void approved() {
+        this.approved = false;
+    }
 }

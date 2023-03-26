@@ -24,15 +24,12 @@ public class UserEntity {
     private Long id;
 
     @Column
-    @NotBlank(message = "User email cannot be null")
     private String email;
 
     @Column
-    @NotNull(message = "Password cannot be null")
     private String password;
 
     @Column
-    @NotBlank(message = "Name can not be blank")
     private String name;
 
     @Column(nullable = false)
