@@ -20,24 +20,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
-
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private CategoryMapper categoryMapper;
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
     @Override
     public List<CategoryResponse> getAllCategories() {
         List<CategoryEntity> categoryList = categoryRepository.findAll();
-        List<CategoryResponse> categoryResponseList = categoryMapper.toListCategoryResponse(categoryList);
-        return categoryResponseList;
+        return categoryMapper.toListCategoryResponse(categoryList);
     }
 
     @Override
     public CategoryResponse getCategoryById(Long id) {
-        CategoryEntity category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
+        CategoryEntity category = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
         return categoryMapper.toCategoryResponse(category);
     }
 
@@ -50,7 +48,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
-        CategoryEntity category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
+        CategoryEntity category = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
         category.setName(categoryRequest.getName());
         categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(category);

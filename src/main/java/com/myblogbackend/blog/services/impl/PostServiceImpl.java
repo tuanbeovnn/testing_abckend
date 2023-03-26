@@ -42,8 +42,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponse> getAllPosts() {
         List<PostEntity> postEntities = postRepository.findAll();
-        List<PostResponse> postList = postMapper.toListPostResponse(postEntities);
-        return postList;
+        return postMapper.toListPostResponse(postEntities);
     }
 
     @Override
@@ -52,8 +51,7 @@ public class PostServiceImpl implements PostService {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
         }
         List<PostEntity> posts = postRepository.findByCategoryId(categoryId);
-        List<PostResponse> postList = postMapper.toListPostResponse(posts);
-        return postList;
+        return postMapper.toListPostResponse(posts);
     }
 
     @Override
@@ -67,7 +65,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse updatePost(Long id, PostRequest postRequest) {
-        PostEntity post = postRepository.findById(id).orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
+        PostEntity post = postRepository.findById(id)
+                .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
         var category = validateCategory(postRequest.getCategoryId());
         post.setTitle(postRequest.getTitle());
         post.setContent(postRequest.getContent());
