@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    CategoryEntity toCategoryEntity(CategoryResponse categoryResponse);
 
     CategoryResponse toCategoryResponse(CategoryEntity categoryEntity);
 

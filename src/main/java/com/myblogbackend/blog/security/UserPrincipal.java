@@ -6,16 +6,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class UserPrincipal implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final Long id;
+    private final UUID id;
 
     private final String name;
 
@@ -26,7 +23,7 @@ public class UserPrincipal implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public UserPrincipal(final Long id, final String name,
+    public UserPrincipal(final UUID id, final String name,
                          final String email, final String password) {
         this.id = id;
         this.name = name;
@@ -43,7 +40,7 @@ public class UserPrincipal implements UserDetails {
         );
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

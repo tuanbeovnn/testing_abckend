@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + UserRoutes.BASE_URL)
@@ -27,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/byID/{id}")
-    public ResponseEntity<?> getUserProfileById(final @PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getUserProfileById(final @PathVariable(value = "id") UUID id) {
         UserResponse userProfile = userService.findUserById(id);
         return ResponseEntity.ok(userProfile);
     }
