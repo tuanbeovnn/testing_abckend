@@ -52,21 +52,6 @@ public class AuthServiceImpl implements AuthService {
         return new JwtResponse(jwtToken, refreshTokenEntity.getToken(), jwtProvider.getExpiryDuration());
     }
 
-    private RefreshTokenEntity createRefreshToken(LoginFormRequest loginRequest, UserEntity userEntity) {
-        userDeviceRepository.findByUserId(userEntity.getId())
-                .map(UserDeviceEntity::getRefreshToken)
-                .map(RefreshTokenEntity::getId)
-                .ifPresent(refreshTokenRepository::deleteById);
-
-        var userDeviceEntity = createUserDevice(loginRequest.getDeviceInfo());
-        var refreshTokenEntity = createRefreshToken();
-        userDeviceEntity.setUser(userEntity);
-        userDeviceEntity.setRefreshToken(refreshTokenEntity);
-        refreshTokenEntity.setUserDevice(userDeviceEntity);
-        refreshTokenEntity = refreshTokenRepository.save(refreshTokenEntity);
-        return refreshTokenEntity;
-    }
-
     @Override
     public UserResponse registerUser(SignUpFormRequest signUpRequest, HttpServletRequest request) {
         var userEntity = usersRepository.findByEmail(signUpRequest.getEmail())
@@ -97,13 +82,13 @@ public class AuthServiceImpl implements AuthService {
         return new JwtResponse(token.get(), tokenRefreshRequest.getRefreshToken(), jwtProvider.getExpiryDuration());
     }
 
-    public void verifyExpiration(RefreshTokenEntity token) {
+    private void verifyExpiration(RefreshTokenEntity token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             throw new TokenRefreshException(token.getToken(), "Expired token. Please issue a new request");
         }
     }
 
-    public void verifyRefreshAvailability(RefreshTokenEntity refreshTokenEntity) {
+    private void verifyRefreshAvailability(RefreshTokenEntity refreshTokenEntity) {
         var userDeviceEntity = userDeviceRepository.findByRefreshToken(refreshTokenEntity)
                 .orElseThrow(() -> new TokenRefreshException(refreshTokenEntity.getToken(), "No device found for the matching token. Please login again"));
         if (!userDeviceEntity.getIsRefreshActive()) {
@@ -111,12 +96,12 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    public void increaseCount(RefreshTokenEntity refreshTokenEntity) {
+    private void increaseCount(RefreshTokenEntity refreshTokenEntity) {
         refreshTokenEntity.incrementRefreshCount();
         refreshTokenRepository.save(refreshTokenEntity);
     }
 
-    public UserDeviceEntity createUserDevice(DeviceInfoRequest deviceInfoRequest) {
+    private UserDeviceEntity createUserDevice(DeviceInfoRequest deviceInfoRequest) {
         return UserDeviceEntity.builder()
                 .deviceId(deviceInfoRequest.getDeviceId())
                 .deviceType(deviceInfoRequest.getDeviceType())
@@ -124,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    public RefreshTokenEntity createRefreshToken() {
+    private RefreshTokenEntity createRefreshToken() {
         return RefreshTokenEntity.builder()
                 .expiryDate(Instant.now().plusMillis(ONE_HOUR_IN_MILLIS))
                 .token(UUID.randomUUID().toString())
@@ -139,5 +124,20 @@ public class AuthServiceImpl implements AuthService {
                         loginRequest.getPassword()
                 )
         );
+    }
+
+    private RefreshTokenEntity createRefreshToken(LoginFormRequest loginRequest, UserEntity userEntity) {
+        userDeviceRepository.findByUserId(userEntity.getId())
+                .map(UserDeviceEntity::getRefreshToken)
+                .map(RefreshTokenEntity::getId)
+                .ifPresent(refreshTokenRepository::deleteById);
+
+        var userDeviceEntity = createUserDevice(loginRequest.getDeviceInfo());
+        var refreshTokenEntity = createRefreshToken();
+        userDeviceEntity.setUser(userEntity);
+        userDeviceEntity.setRefreshToken(refreshTokenEntity);
+        refreshTokenEntity.setUserDevice(userDeviceEntity);
+        refreshTokenEntity = refreshTokenRepository.save(refreshTokenEntity);
+        return refreshTokenEntity;
     }
 }
