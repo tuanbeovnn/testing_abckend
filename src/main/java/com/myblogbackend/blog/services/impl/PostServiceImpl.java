@@ -52,6 +52,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+
     public Map<String, Object> getAllPostsPagination(String title, int page, int size) {
         Pageable paging = PageRequest.of(page, size);
         Page<PostEntity> pagePosts;
