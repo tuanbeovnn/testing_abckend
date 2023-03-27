@@ -6,16 +6,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class UserPrincipal implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final Long id;
+    private final UUID id;
 
     private final String name;
 
@@ -26,15 +23,15 @@ public class UserPrincipal implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String name,
-                         String email, String password) {
+    public UserPrincipal(final UUID id, final String name,
+                         final String email, final String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public static UserPrincipal build(UserEntity userEntity) {
+    public static UserPrincipal build(final UserEntity userEntity) {
         return new UserPrincipal(
                 userEntity.getId(),
                 userEntity.getName(),
@@ -43,7 +40,7 @@ public class UserPrincipal implements UserDetails {
         );
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -91,7 +88,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -103,7 +100,7 @@ public class UserPrincipal implements UserDetails {
         return attributes;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
+    public void setAttributes(final Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 }

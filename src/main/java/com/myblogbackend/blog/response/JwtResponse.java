@@ -13,7 +13,7 @@ public class JwtResponse {
     private String tokenType;
     private Long expiryDuration;
 
-    public JwtResponse(String accessToken, String refreshToken, Long expiryDuration) {
+    public JwtResponse(final String accessToken, final String refreshToken, final Long expiryDuration) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiryDuration = expiryDuration;

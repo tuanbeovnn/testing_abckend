@@ -4,7 +4,6 @@ package com.myblogbackend.blog.services.impl;
 import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.security.UserPrincipal;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,8 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UsersRepository usersRepository;
 
     @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username)
+    public UserDetails loadUserByUsername(final String username)
             throws UsernameNotFoundException {
 
         UserEntity userEntity = usersRepository.findByEmail(username)

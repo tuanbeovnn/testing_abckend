@@ -27,7 +27,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginFormRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(final @Valid @RequestBody LoginFormRequest loginRequest) {
         var jwtResponse = authService.userLogin(loginRequest);
         if (Objects.isNull(jwtResponse)) {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "User has been deactivated/locked !!"));
@@ -36,7 +36,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpFormRequest signUpRequest, HttpServletRequest request) {
+    public ResponseEntity<?> registerUser(final @Valid @RequestBody SignUpFormRequest signUpRequest, final HttpServletRequest request) {
         var newUser = authService.registerUser(signUpRequest, request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/user/me")
@@ -46,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshJwtToken(@Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
+    public ResponseEntity<?> refreshJwtToken(final @Valid @RequestBody TokenRefreshRequest tokenRefreshRequest) {
         var jwtResponse = authService.refreshJwtToken(tokenRefreshRequest);
         return ResponseEntity.ok().body(jwtResponse);
     }

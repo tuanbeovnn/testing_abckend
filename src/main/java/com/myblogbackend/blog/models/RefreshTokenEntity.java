@@ -1,11 +1,13 @@
 package com.myblogbackend.blog.models;
 
 import java.time.Instant;
+import java.util.UUID;
 
 
 import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @NoArgsConstructor
@@ -16,10 +18,11 @@ import lombok.*;
 @Table(name = "refresh_token")
 public class RefreshTokenEntity extends BaseEntity {
 
-	@Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(name = "token", nullable = false, unique = true)
     private String token;

@@ -9,7 +9,7 @@ public final class BlogExceptionResponse {
     @JsonIgnore
     private final HttpStatus httpStatus;
 
-    public BlogExceptionResponse(int errorCode, String errorMessage) {
+    public BlogExceptionResponse(final int errorCode, final String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.httpStatus = HttpStatus.OK;
@@ -27,7 +27,7 @@ public final class BlogExceptionResponse {
         return this.httpStatus;
     }
 
-    public BlogExceptionResponse(int code, String message, HttpStatus httpStatus) {
+    public BlogExceptionResponse(final int code, final String message, final HttpStatus httpStatus) {
         this.errorCode = code;
         this.errorMessage = message;
         this.httpStatus = httpStatus;

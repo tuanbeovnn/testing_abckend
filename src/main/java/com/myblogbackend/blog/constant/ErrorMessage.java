@@ -14,7 +14,7 @@ public enum ErrorMessage {
 
     private final BlogExceptionResponse resultCode;
 
-    ErrorMessage(int code, String message) {
+    ErrorMessage(final int code, final String message) {
         this.resultCode = new BlogExceptionResponse(code, message);
     }
 

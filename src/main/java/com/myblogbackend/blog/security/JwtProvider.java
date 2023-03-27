@@ -19,14 +19,17 @@ import java.util.Date;
 public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    public static final String ISSUER_GENERATE_TOKEN = "StackAbuse";
+    public static final String ISSUER_GENERATE_REFRESH_TOKEN = "Therapex";
+    public static final String SIGNING_KEY = "HelloWorld";
 
     private final LoggedOutJwtTokenCache loggedOutJwtTokenCache;
 
-    public JwtProvider(@Lazy LoggedOutJwtTokenCache loggedOutJwtTokenCache) {
+    public JwtProvider(final @Lazy LoggedOutJwtTokenCache loggedOutJwtTokenCache) {
         this.loggedOutJwtTokenCache = loggedOutJwtTokenCache;
     }
 
-    public String generateJwtToken(Authentication authentication) {
+    public String generateJwtToken(final Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
@@ -35,45 +38,45 @@ public class JwtProvider {
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
-                .setIssuer("StackAbuse")
-                .setId(Long.toString(userPrincipal.getId()))
+                .setIssuer(ISSUER_GENERATE_TOKEN)
+                .setId(String.valueOf(userPrincipal.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, "HelloWorld")
+                .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
     }
 
-    public String generateTokenFromUser(UserEntity userEntity) {
+    public String generateTokenFromUser(final UserEntity userEntity) {
         Instant expiryDate = Instant.now().plusMillis(3600000);
         return Jwts.builder()
                 .setSubject(userEntity.getEmail())
-                .setIssuer("Therapex")
-                .setId(Long.toString(userEntity.getId()))
+                .setIssuer(ISSUER_GENERATE_REFRESH_TOKEN)
+                .setId(String.valueOf(userEntity.getId()))
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(expiryDate))
-                .signWith(SignatureAlgorithm.HS512, "HelloWorld")
+                .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    public String getUserNameFromJwtToken(final String token) {
         return Jwts.parser()
-                .setSigningKey("HelloWorld")
+                .setSigningKey(SIGNING_KEY)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
 
-    public Date getTokenExpiryFromJWT(String token) {
+    public Date getTokenExpiryFromJWT(final String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey("HelloWorld")
+                .setSigningKey(SIGNING_KEY)
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getExpiration();
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateJwtToken(final String authToken) {
         try {
-            Jwts.parser().setSigningKey("HelloWorld").parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(SIGNING_KEY).parseClaimsJws(authToken);
             validateTokenIsNotForALoggedOutDevice(authToken);
             return true;
         } catch (MalformedJwtException e) {
@@ -89,12 +92,13 @@ public class JwtProvider {
         return false;
     }
 
-    private void validateTokenIsNotForALoggedOutDevice(String authToken) {
+    private void validateTokenIsNotForALoggedOutDevice(final String authToken) {
         OnUserLogoutSuccessEvent previouslyLoggedOutEvent = loggedOutJwtTokenCache.getLogoutEventForToken(authToken);
         if (previouslyLoggedOutEvent != null) {
             String userEmail = previouslyLoggedOutEvent.getUserEmail();
             Date logoutEventDate = previouslyLoggedOutEvent.getEventTime();
-            String errorMessage = String.format("Token corresponds to an already logged out user [%s] at [%s]. Please login again", userEmail, logoutEventDate);
+            String errorMessage = String.format("Token corresponds to an already logged out user [%s] at [%s]. Please login again",
+                    userEmail, logoutEventDate);
             throw new InvalidTokenRequestException("JWT", authToken, errorMessage);
         }
     }

@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     @Override
-    public JwtResponse userLogin(LoginFormRequest loginRequest) {
+    public JwtResponse userLogin(final LoginFormRequest loginRequest) {
         var userEntity = usersRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User not found."));
 
@@ -52,23 +52,8 @@ public class AuthServiceImpl implements AuthService {
         return new JwtResponse(jwtToken, refreshTokenEntity.getToken(), jwtProvider.getExpiryDuration());
     }
 
-    private RefreshTokenEntity createRefreshToken(LoginFormRequest loginRequest, UserEntity userEntity) {
-        userDeviceRepository.findByUserId(userEntity.getId())
-                .map(UserDeviceEntity::getRefreshToken)
-                .map(RefreshTokenEntity::getId)
-                .ifPresent(refreshTokenRepository::deleteById);
-
-        var userDeviceEntity = createUserDevice(loginRequest.getDeviceInfo());
-        var refreshTokenEntity = createRefreshToken();
-        userDeviceEntity.setUser(userEntity);
-        userDeviceEntity.setRefreshToken(refreshTokenEntity);
-        refreshTokenEntity.setUserDevice(userDeviceEntity);
-        refreshTokenEntity = refreshTokenRepository.save(refreshTokenEntity);
-        return refreshTokenEntity;
-    }
-
     @Override
-    public UserResponse registerUser(SignUpFormRequest signUpRequest, HttpServletRequest request) {
+    public UserResponse registerUser(final SignUpFormRequest signUpRequest, final HttpServletRequest request) {
         var userEntity = usersRepository.findByEmail(signUpRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail -> Email is already in use!"));
         // Creating user's account
@@ -81,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public JwtResponse refreshJwtToken(TokenRefreshRequest tokenRefreshRequest) {
+    public JwtResponse refreshJwtToken(final TokenRefreshRequest tokenRefreshRequest) {
         var requestRefreshToken = tokenRefreshRequest.getRefreshToken();
         var token = Optional.of(refreshTokenRepository.findByToken(requestRefreshToken)
                 .map(refreshToken -> {
@@ -97,13 +82,13 @@ public class AuthServiceImpl implements AuthService {
         return new JwtResponse(token.get(), tokenRefreshRequest.getRefreshToken(), jwtProvider.getExpiryDuration());
     }
 
-    public void verifyExpiration(RefreshTokenEntity token) {
+    private void verifyExpiration(final RefreshTokenEntity token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             throw new TokenRefreshException(token.getToken(), "Expired token. Please issue a new request");
         }
     }
 
-    public void verifyRefreshAvailability(RefreshTokenEntity refreshTokenEntity) {
+    private void verifyRefreshAvailability(final RefreshTokenEntity refreshTokenEntity) {
         var userDeviceEntity = userDeviceRepository.findByRefreshToken(refreshTokenEntity)
                 .orElseThrow(() -> new TokenRefreshException(refreshTokenEntity.getToken(), "No device found for the matching token. Please login again"));
         if (!userDeviceEntity.getIsRefreshActive()) {
@@ -111,12 +96,12 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    public void increaseCount(RefreshTokenEntity refreshTokenEntity) {
+    private void increaseCount(final RefreshTokenEntity refreshTokenEntity) {
         refreshTokenEntity.incrementRefreshCount();
         refreshTokenRepository.save(refreshTokenEntity);
     }
 
-    public UserDeviceEntity createUserDevice(DeviceInfoRequest deviceInfoRequest) {
+    private UserDeviceEntity createUserDevice(final DeviceInfoRequest deviceInfoRequest) {
         return UserDeviceEntity.builder()
                 .deviceId(deviceInfoRequest.getDeviceId())
                 .deviceType(deviceInfoRequest.getDeviceType())
@@ -124,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    public RefreshTokenEntity createRefreshToken() {
+    private RefreshTokenEntity createRefreshToken() {
         return RefreshTokenEntity.builder()
                 .expiryDate(Instant.now().plusMillis(ONE_HOUR_IN_MILLIS))
                 .token(UUID.randomUUID().toString())
@@ -132,12 +117,27 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    private Authentication authenticateUser(LoginFormRequest loginRequest) {
+    private Authentication authenticateUser(final LoginFormRequest loginRequest) {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
                         loginRequest.getPassword()
                 )
         );
+    }
+
+    private RefreshTokenEntity createRefreshToken(final LoginFormRequest loginRequest, final UserEntity userEntity) {
+        userDeviceRepository.findByUserId(userEntity.getId())
+                .map(UserDeviceEntity::getRefreshToken)
+                .map(RefreshTokenEntity::getId)
+                .ifPresent(refreshTokenRepository::deleteById);
+
+        var userDeviceEntity = createUserDevice(loginRequest.getDeviceInfo());
+        var refreshTokenEntity = createRefreshToken();
+        userDeviceEntity.setUser(userEntity);
+        userDeviceEntity.setRefreshToken(refreshTokenEntity);
+        refreshTokenEntity.setUserDevice(userDeviceEntity);
+        refreshTokenEntity = refreshTokenRepository.save(refreshTokenEntity);
+        return refreshTokenEntity;
     }
 }
