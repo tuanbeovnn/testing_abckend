@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public void logoutUser(LogOutRequest logOutRequest, UserPrincipal currentUser) {
+    public void logoutUser(final LogOutRequest logOutRequest, final UserPrincipal currentUser) {
         var deviceId = logOutRequest.getDeviceInfo().getDeviceId();
         var userDevice = userDeviceRepository.findByUserId(currentUser.getId())
                 .filter(device -> device.getDeviceId().equals(deviceId))
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse findUserById(Long id) {
+    public UserResponse findUserById(final UUID id) {
         var userEntity = getUserById(id);
         return userMapper.toUserDTO(userEntity);
     }
@@ -52,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDTO(userEntity);
     }
 
-    private UserEntity getUserById(Long id) {
+    private UserEntity getUserById(final UUID id) {
         return usersRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }

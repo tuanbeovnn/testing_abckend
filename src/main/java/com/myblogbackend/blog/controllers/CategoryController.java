@@ -21,19 +21,19 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getCategoryById(final @PathVariable(value = "id") Long id) {
         var category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(category);
     }
 
     @PostMapping
-    public ResponseEntity<?> createCategory(CategoryRequest categoryRequest) {
+    public ResponseEntity<?> createCategory(final CategoryRequest categoryRequest) {
         var categoryResponse = categoryService.createCategory(categoryRequest);
         return ResponseEntity.ok(categoryResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(CategoryRequest categoryRequest, @PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> updateCategory(final CategoryRequest categoryRequest, final @PathVariable(value = "id") Long id) {
         var category = categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity.ok(category);
     }

@@ -24,7 +24,7 @@ public class OnUserLogoutSuccessEvent extends ApplicationEvent {
     private final transient LogOutRequest logOutRequest;
     private final Date eventTime;
     
-    public OnUserLogoutSuccessEvent(String userEmail, String token, LogOutRequest logOutRequest) {
+    public OnUserLogoutSuccessEvent(final String userEmail, final String token, final LogOutRequest logOutRequest) {
         super(userEmail);
         this.userEmail = userEmail;
         this.token = token;

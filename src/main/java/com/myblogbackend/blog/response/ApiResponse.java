@@ -11,7 +11,7 @@ public class ApiResponse {
     private boolean success;
     private String message;
 
-    public ApiResponse(boolean success, String message) {
+    public ApiResponse(final boolean success, final String message) {
         this.setSuccess(success);
         this.setMessage(message);
     }

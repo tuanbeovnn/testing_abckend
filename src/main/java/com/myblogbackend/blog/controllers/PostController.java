@@ -21,7 +21,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPostById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getPostById(final @PathVariable(value = "id") Long id) {
         var post = postService.getPostById(id);
         return ResponseEntity.ok(post);
     }
@@ -33,8 +33,8 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable(value = "id") Long id,
-                                        PostRequest postRequest) {
+    public ResponseEntity<?> updatePost(final @PathVariable(value = "id") Long id,
+                                        final PostRequest postRequest) {
         var post = postService.updatePost(id, postRequest);
         return ResponseEntity.ok(post);
     }

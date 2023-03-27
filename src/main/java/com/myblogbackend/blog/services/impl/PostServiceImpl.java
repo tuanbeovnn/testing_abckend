@@ -13,6 +13,7 @@ import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.services.PostService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +58,11 @@ public class PostServiceImpl implements PostService {
         if (title == null) pagePosts = postRepository.findAll(paging);
         else
             pagePosts = postRepository.findByTitleContaining(title, paging);
+        return getStringObjectMap(pagePosts);
+    }
+
+    @NotNull
+    private Map<String, Object> getStringObjectMap(Page<PostEntity> pagePosts) {
         List<PostResponse> postResponseList = postMapper.toListPostResponse(pagePosts.getContent());
         Map<String, Object> response = new HashMap<>();
         response.put("posts", postResponseList);
@@ -73,13 +79,7 @@ public class PostServiceImpl implements PostService {
         }
         Pageable paging = PageRequest.of(page, size);
         Page<PostEntity> pagePostEntity = postRepository.findByCategoryId(categoryId, paging);
-        List<PostResponse> postResponseList = postMapper.toListPostResponse(pagePostEntity.getContent());
-        Map<String, Object> response = new HashMap<>();
-        response.put("posts", postResponseList);
-        response.put("currentPage", pagePostEntity.getNumber());
-        response.put("totalItems", pagePostEntity.getTotalElements());
-        response.put("totalPages", pagePostEntity.getTotalPages());
-        return response;
+        return getStringObjectMap(pagePostEntity);
     }
 
     @Override

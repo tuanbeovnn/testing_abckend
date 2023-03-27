@@ -5,7 +5,7 @@ import com.myblogbackend.blog.constant.ErrorMessage;
 
 public class BlogLangException extends LangException {
 
-    public BlogLangException(BlogExceptionResponse resultCode, Object... args) {
+    public BlogLangException(final BlogExceptionResponse resultCode, final Object... args) {
         super(resultCode);
         Object[] newArgs = new Object[args.length + 1];
         System.arraycopy(args, 0, newArgs, 1, args.length);
@@ -13,7 +13,7 @@ public class BlogLangException extends LangException {
         setTranslateArgs(newArgs);
     }
 
-    public BlogLangException(ErrorMessage resultCodes, Object... args) {
+    public BlogLangException(final ErrorMessage resultCodes, final Object... args) {
         this(resultCodes.getResultCode(), args);
     }
 }
