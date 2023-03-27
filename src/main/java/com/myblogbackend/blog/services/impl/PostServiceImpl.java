@@ -4,6 +4,7 @@ import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.mapper.PostMapper;
 import com.myblogbackend.blog.models.CategoryEntity;
+import com.myblogbackend.blog.models.PostEntity;
 import com.myblogbackend.blog.repositories.CategoryRepository;
 import com.myblogbackend.blog.repositories.PostRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
@@ -12,9 +13,16 @@ import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.services.PostService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -43,12 +51,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getAllPostsByCategoryId(Long categoryId) {
+    public Map<String, Object> getAllPostsPagination(String title, int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<PostEntity> pagePosts;
+        if (title == null) pagePosts = postRepository.findAll(paging);
+        else
+            pagePosts = postRepository.findByTitleContaining(title, paging);
+        List<PostResponse> postResponseList = postMapper.toListPostResponse(pagePosts.getContent());
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", postResponseList);
+        response.put("currentPage", pagePosts.getNumber());
+        response.put("totalItems", pagePosts.getTotalElements());
+        response.put("totalPages", pagePosts.getTotalPages());
+        return response;
+    }
+
+    @Override
+    public Map<String, Object> getAllPostsByCategoryId(Long categoryId, int page, int size) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
         }
-        var posts = postRepository.findByCategoryId(categoryId);
-        return postMapper.toListPostResponse(posts);
+        Pageable paging = PageRequest.of(page, size);
+        Page<PostEntity> pagePostEntity = postRepository.findByCategoryId(categoryId, paging);
+        List<PostResponse> postResponseList = postMapper.toListPostResponse(pagePostEntity.getContent());
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", postResponseList);
+        response.put("currentPage", pagePostEntity.getNumber());
+        response.put("totalItems", pagePostEntity.getTotalElements());
+        response.put("totalPages", pagePostEntity.getTotalPages());
+        return response;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class PostController {
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<?> getAllPostsByCategoryId(@PathVariable(value = "categoryId") Long categoryId) {
-        var postList = postService.getAllPostsByCategoryId(categoryId);
+        var postList = postService.getAllPostsByCategoryId(categoryId, 5,10);
         return ResponseEntity.ok(postList);
     }
 
