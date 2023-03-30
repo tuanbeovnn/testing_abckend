@@ -9,8 +9,6 @@ import org.springframework.data.domain.Sort;
 import java.io.Serializable;
 
 public class OffsetPageRequest implements Pageable, Serializable {
-    private static final long serialVersionUID = -25822477129613575L;
-
     private final long limit;
     private final long offset;
     private final Sort sort;

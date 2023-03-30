@@ -5,34 +5,35 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class PaginationPage<E> {
+public class PaginationPage<T> {
     private long totalRecords;
     private long offset;
     private long limit;
-    private Collection records;
+    private Collection<T> records;
 
-    public PaginationPage(final long totalRecords, final long offset, final long limit, final List<E> records) {
+    public PaginationPage(final long totalRecords, final long offset, final long limit, final List<T> records) {
         this.totalRecords = totalRecords;
         this.offset = offset;
         this.limit = limit;
         this.records = records;
     }
 
-    public PaginationPage(final long totalRecords, final long offset, final long limit, final Set<E> records) {
+    public PaginationPage(final long totalRecords, final long offset, final long limit, final Set<T> records) {
         this.totalRecords = totalRecords;
         this.offset = offset;
         this.limit = limit;
         this.records = records;
     }
 
-    public PaginationPage(){
-
+    public PaginationPage() {
+        this(0, 0, 0, Collections.emptyList());
     }
+
     public long getTotalRecords() {
-        return this.totalRecords == 0L ? (long) this.records.size() : this.totalRecords;
+        return totalRecords == 0L ? records.size() : totalRecords;
     }
 
-    public PaginationPage<E> setTotalRecords(final long totalRecords) {
+    public PaginationPage<T> setTotalRecords(final long totalRecords) {
         this.totalRecords = totalRecords;
         return this;
     }
@@ -41,7 +42,7 @@ public class PaginationPage<E> {
         return offset;
     }
 
-    public PaginationPage<E> setOffset(final long offset) {
+    public PaginationPage<T> setOffset(final long offset) {
         this.offset = offset;
         return this;
     }
@@ -50,16 +51,16 @@ public class PaginationPage<E> {
         return limit;
     }
 
-    public PaginationPage<E> setLimit(final long limit) {
+    public PaginationPage<T> setLimit(final long limit) {
         this.limit = limit;
         return this;
     }
 
-    public Collection<E> getRecords() {
+    public Collection<T> getRecords() {
         return records;
     }
 
-    public PaginationPage<E> setRecords(final Collection<E> records) {
+    public PaginationPage<T> setRecords(final Collection<T> records) {
         this.records = records == null ? Collections.emptyList() : records;
         return this;
     }
