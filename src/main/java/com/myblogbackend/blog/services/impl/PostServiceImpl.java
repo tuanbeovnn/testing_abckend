@@ -4,6 +4,7 @@ import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.mapper.PostMapper;
 import com.myblogbackend.blog.models.CategoryEntity;
+import com.myblogbackend.blog.models.PostEntity;
 import com.myblogbackend.blog.pagination.OffsetPageRequest;
 import com.myblogbackend.blog.pagination.PaginationPage;
 import com.myblogbackend.blog.repositories.CategoryRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,17 +43,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PaginationPage<PostResponse> getAllPosts(final Integer offset, final Integer limited) {
-        var postEntities = postRepository.findAll();
         var pageable = new OffsetPageRequest(offset, limited);
-        var page = new PageImpl<>(postEntities, pageable, postEntities.size());
+        var postPage = postRepository.findAll(pageable);
+        var postResponses = postPage.getContent().stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
         return new PaginationPage<PostResponse>()
-                .setRecords(page.getContent()
-                        .stream()
-                        .map(postMapper::toPostResponse)
-                        .toList())
-                .setOffset(offset)
-                .setLimit(limited)
-                .setTotalRecords(postEntities.size());
+                .setRecords(postResponses)
+                .setOffset(postPage.getNumber())
+                .setLimit(postPage.getSize())
+                .setTotalRecords(postPage.getTotalElements());
     }
 
     @Override
