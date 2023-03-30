@@ -3,6 +3,7 @@ package com.myblogbackend.blog.controllers;
 import com.myblogbackend.blog.controllers.route.CommonRoutes;
 import com.myblogbackend.blog.controllers.route.PostRoutes;
 import com.myblogbackend.blog.request.PostRequest;
+import com.myblogbackend.blog.response.ResponseEntityBuilder;
 import com.myblogbackend.blog.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,13 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping()
-    public ResponseEntity<?> getAllPosts() {
-        var postList = postService.getAllPosts();
-        return ResponseEntity.ok(postList);
+    public ResponseEntity<?> getAllPosts(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
+                                         @RequestParam(name = "limit", defaultValue = "10") final Integer limit) {
+        var postList = postService.getAllPosts(offset, limit);
+        return ResponseEntityBuilder
+                .getBuilder()
+                .setDetails(postList)
+                .build();
     }
 
     @GetMapping("/{id}")

@@ -1,12 +1,13 @@
 package com.myblogbackend.blog.services;
 
+import com.myblogbackend.blog.pagination.PaginationPage;
 import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.response.PostResponse;
 
 import java.util.List;
 
 public interface PostService {
-    List<PostResponse> getAllPosts();
+    PaginationPage<PostResponse> getAllPosts(Integer page, Integer size);
 
     List<PostResponse> getAllPostsByCategoryId(Long categoryId);
 
