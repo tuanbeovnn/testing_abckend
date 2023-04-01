@@ -2,10 +2,7 @@ package com.myblogbackend.blog.models;
 
 import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PostEntity extends BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -40,6 +38,6 @@ public class PostEntity extends BaseEntity {
     @JoinColumn(name ="user_id" )
     private UserEntity user;
     public void approved() {
-        this.approved = false;
+        this.approved = true;
     }
 }

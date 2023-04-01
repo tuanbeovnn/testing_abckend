@@ -13,6 +13,4 @@ public class PostResponse {
     private UUID id;
     private String title;
     private String content;
-    private UserResponse userInfo;
-
 }
