@@ -16,10 +16,20 @@ import java.util.UUID;
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("/{userId}")
+    @GetMapping()
     public ResponseEntity<?> getAllPosts(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
+                                         @RequestParam(name = "limit", defaultValue = "10") final Integer limit) {
+        var post = postService.getAllPosts(offset, limit);
+        return ResponseEntityBuilder
+                .getBuilder()
+                .setDetails(post)
+                .build();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getAllPostsByUserId(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
                                          @RequestParam(name = "limit", defaultValue = "10") final Integer limit, @PathVariable final UUID userId) {
-        var postList = postService.getAllPosts(offset, limit, userId);
+        var postList = postService.getAllPostsByUserId(offset, limit, userId);
         return ResponseEntityBuilder
                 .getBuilder()
                 .setDetails(postList)
@@ -33,9 +43,14 @@ public class PostController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<?> getAllPostsByCategoryId(@PathVariable(value = "categoryId") final UUID categoryId) {
-        var postList = postService.getAllPostsByCategoryId(categoryId);
-        return ResponseEntity.ok(postList);
+    public ResponseEntity<?> getAllPostsByCategoryId(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
+                                                     @RequestParam(name = "limit", defaultValue = "10") final Integer limit,
+                                                     @PathVariable(value = "categoryId") final UUID categoryId) {
+        var postList = postService.getAllPostsByCategoryId(offset, limit, categoryId);
+        return ResponseEntityBuilder
+                .getBuilder()
+                .setDetails(postList)
+                .build();
     }
 
     @PutMapping("/{id}")

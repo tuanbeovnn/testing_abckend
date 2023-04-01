@@ -16,7 +16,6 @@ import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PaginationPage<PostResponse> getAllPosts(final Integer offset, final Integer limited, final UUID userId) {
+    public PaginationPage<PostResponse> getAllPostsByUserId(final Integer offset, final Integer limited, final UUID userId) {
         var pageable = new OffsetPageRequest(offset, limited);
         var postEntities = postRepository.findAllByUserId(userId, pageable);
         var postResponses = postEntities.getContent().stream()
@@ -55,12 +54,36 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getAllPostsByCategoryId(final UUID categoryId) {
+    public PaginationPage<PostResponse> getAllPosts(final Integer offset, final Integer limited) {
+        var pageable = new OffsetPageRequest(offset, limited);
+        var postEntities = postRepository.findAll(pageable);
+        var postResponses = postEntities.getContent().stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
+        return new PaginationPage<PostResponse>()
+                .setRecords(postResponses)
+                .setOffset(postEntities.getNumber())
+                .setLimit(postEntities.getSize())
+                .setTotalRecords(postEntities.getTotalElements());
+
+    }
+
+    @Override
+    public PaginationPage<PostResponse> getAllPostsByCategoryId(final Integer offset, final Integer limited, final UUID categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
         }
-        var posts = postRepository.findByCategoryId(categoryId);
-        return postMapper.toListPostResponse(posts);
+        var pageable = new OffsetPageRequest(offset, limited);
+        var posts = postRepository.findAllByCategoryId(pageable, categoryId);
+        var postResponses = posts.getContent().stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
+
+        return new PaginationPage<PostResponse>()
+                .setRecords(postResponses)
+                .setOffset(posts.getNumber())
+                .setLimit(posts.getSize())
+                .setTotalRecords(posts.getTotalElements());
     }
 
     @Override

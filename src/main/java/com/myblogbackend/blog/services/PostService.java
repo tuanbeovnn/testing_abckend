@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostService {
-    PaginationPage<PostResponse> getAllPosts(Integer page, Integer size, UUID userId);
+    PaginationPage<PostResponse> getAllPostsByUserId(Integer offset, Integer limited, UUID userId);
+    PaginationPage<PostResponse> getAllPosts(Integer offset, Integer limited);
+    PaginationPage<PostResponse> getAllPostsByCategoryId(Integer offset, Integer limited,UUID categoryId);
 
-    List<PostResponse> getAllPostsByCategoryId(UUID categoryId);
 
     PostResponse getPostById(UUID id);
 
