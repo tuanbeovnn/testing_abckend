@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,4 +23,8 @@ public class CategoryEntity extends BaseEntity {
     private UUID id;
     @Column
     private String name;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<PostEntity> posts;
+
 }

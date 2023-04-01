@@ -14,13 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.myblogbackend.blog.post.PostsTestApi.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,7 +29,6 @@ public class PostsApiDelegateImplTest {
     private MockMvc mockMvc;
     @Autowired
     private PostRepository postRepository;
-
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -39,18 +37,18 @@ public class PostsApiDelegateImplTest {
 
     @Test
     public void testCreatePost() throws Exception {
-        // arrange
         UUID uuid = UUID.randomUUID();
-        prepareRepositoryForFindingCategory(uuid, prepareCategoryForCreating(uuid));
-        var expectedPostResponse = makePostResponse(uuid, createPostRequestData().getTitle(), createPostRequestData().getContent());
-        mockMvc.perform(post("/api/v1/posts")
-                        .content(IntegrationTestUtil.asJsonString(createPostRequestData()))
+        prepareRepositoryForFindingCategory(uuid, PostsTestApi.prepareCategoryForCreating(uuid));
+        var expectedPostResponse = PostsTestApi.makePostResponse(uuid, PostsTestApi.createPostRequestData().getTitle(),
+                PostsTestApi.createPostRequestData().getContent());
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/posts")
+                        .content(IntegrationTestUtil.asJsonString(PostsTestApi.createPostRequestData()))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    private void prepareRepositoryForFindingCategory(UUID uuid, CategoryEntity category) {
+    private void prepareRepositoryForFindingCategory(final UUID uuid, final CategoryEntity category) {
         Mockito.when(categoryRepository.findById(uuid)).thenReturn(Optional.of(category));
     }
 

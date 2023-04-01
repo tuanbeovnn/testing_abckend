@@ -6,15 +6,12 @@ import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.response.CategoryResponse;
 import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.security.UserPrincipal;
-import org.mockito.Mockito;
 
-import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.UUID;
 
 public final class PostsTestApi {
 
-    public static PostResponse makePostResponse(UUID id, String title, String content) {
+    public static PostResponse makePostResponse(final UUID id, final String title, final String content) {
         return PostResponse.builder()
                 .id(id)
                 .title(title)
@@ -46,7 +43,10 @@ public final class PostsTestApi {
     }
 
     public static CategoryEntity prepareCategoryForCreating(final UUID uuid) {
-        return new CategoryEntity(uuid, "Category A");
+        return CategoryEntity.builder()
+                .id(uuid)
+                .name("Category A")
+                .build();
     }
 
     public static CategoryResponse createCategoryData() {

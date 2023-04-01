@@ -34,7 +34,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCategory(final CategoryRequest categoryRequest) {
+    public ResponseEntity<?> createCategory(@RequestBody final CategoryRequest categoryRequest) {
         var categoryResponse = categoryService.createCategory(categoryRequest);
         return ResponseEntity.ok(categoryResponse);
     }
