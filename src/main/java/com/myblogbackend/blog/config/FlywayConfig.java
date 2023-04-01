@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
@@ -19,6 +20,7 @@ public class FlywayConfig {
     private final DataSource dataSource;
 
     @Bean
+    @Profile("!test") // disable Flyway in H2 for test profile
     public Flyway flyway() {
         log.info("Migrating default schema: {} with location: {}", DEFAULT_SCHEMA, DEFAULT_LOCATION);
         var flyway = Flyway.configure()

@@ -4,7 +4,8 @@ import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.mapper.PostMapper;
 import com.myblogbackend.blog.models.CategoryEntity;
-import com.myblogbackend.blog.models.PostEntity;
+import com.myblogbackend.blog.pagination.OffsetPageRequest;
+import com.myblogbackend.blog.pagination.PaginationPage;
 import com.myblogbackend.blog.repositories.CategoryRepository;
 import com.myblogbackend.blog.repositories.PostRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
@@ -13,17 +14,11 @@ import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.services.PostService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +29,7 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     @Override
-    public PostResponse createPost(PostRequest postRequest) {
+    public PostResponse createPost(final PostRequest postRequest) {
         var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
         var category = validateCategory(postRequest.getCategoryId());
         var postEntity = postMapper.toPostEntity(postRequest);
@@ -46,45 +41,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getAllPosts() {
-        var postEntities = postRepository.findAll();
-        return postMapper.toListPostResponse(postEntities);
+    public PaginationPage<PostResponse> getAllPosts(final Integer offset, final Integer limited, final UUID userId) {
+        var pageable = new OffsetPageRequest(offset, limited);
+        var postEntities = postRepository.findAllByUserId(userId, pageable);
+        var postResponses = postEntities.getContent().stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
+        return new PaginationPage<PostResponse>()
+                .setRecords(postResponses)
+                .setOffset(postEntities.getNumber())
+                .setLimit(postEntities.getSize())
+                .setTotalRecords(postEntities.getTotalElements());
     }
 
     @Override
-
-    public Map<String, Object> getAllPostsPagination(String title, int page, int size) {
-        Pageable paging = PageRequest.of(page, size);
-        Page<PostEntity> pagePosts;
-        if (title == null) pagePosts = postRepository.findAll(paging);
-        else
-            pagePosts = postRepository.findByTitleContaining(title, paging);
-        return getStringObjectMap(pagePosts);
-    }
-
-    @NotNull
-    private Map<String, Object> getStringObjectMap(Page<PostEntity> pagePosts) {
-        List<PostResponse> postResponseList = postMapper.toListPostResponse(pagePosts.getContent());
-        Map<String, Object> response = new HashMap<>();
-        response.put("posts", postResponseList);
-        response.put("currentPage", pagePosts.getNumber());
-        response.put("totalItems", pagePosts.getTotalElements());
-        response.put("totalPages", pagePosts.getTotalPages());
-        return response;
-    }
-
-    @Override
-    public Map<String, Object> getAllPostsByCategoryId(Long categoryId, int page, int size) {
+    public List<PostResponse> getAllPostsByCategoryId(final UUID categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
         }
-        Pageable paging = PageRequest.of(page, size);
-        Page<PostEntity> pagePostEntity = postRepository.findByCategoryId(categoryId, paging);
-        return getStringObjectMap(pagePostEntity);
+        var posts = postRepository.findByCategoryId(categoryId);
+        return postMapper.toListPostResponse(posts);
     }
 
     @Override
-    public PostResponse getPostById(Long id) {
+    public PostResponse getPostById(final UUID id) {
         var post = postRepository
                 .findById(id)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
@@ -93,7 +73,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostResponse updatePost(Long id, PostRequest postRequest) {
+    public PostResponse updatePost(final UUID id, final PostRequest postRequest) {
         var post = postRepository.findById(id)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
         var category = validateCategory(postRequest.getCategoryId());
@@ -104,7 +84,7 @@ public class PostServiceImpl implements PostService {
         return postMapper.toPostResponse(updatedPost);
     }
 
-    private CategoryEntity validateCategory(Long categoryId) {
+    private CategoryEntity validateCategory(final UUID categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
     }
