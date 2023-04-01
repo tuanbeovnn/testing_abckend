@@ -47,7 +47,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**",
+            "/api/v1/**",
             "/v3/api-docs/**",
             "/v3/api-docs.yaml",
             "/swagger-ui/**",
@@ -85,7 +85,6 @@ public class WebSecurityConfig {
                         "/**/*.css",
                         "/**/*.js"
                        ).permitAll()
-                .requestMatchers("/api/v1/**").permitAll()
                 .requestMatchers("/user/api/v1/auth/**").permitAll()
                 .requestMatchers("/user/api/v1/core/**").permitAll()
                 .requestMatchers("/user/api/v1/auth/token/refresh").permitAll()

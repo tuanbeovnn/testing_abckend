@@ -13,11 +13,11 @@ minio:
 spring:
     datasource:
         password: P@ssword*123
-        url: jdbc:postgresql://bienhoa.cf:5432/blog_dev?useSSL=false
+        url: jdbc:postgresql://bienhoa.cf:5432/blog_dev?currentSchema=blog_dev
         username: dev
     flyway:
         password: P@ssword*123
-        url: jdbc:postgresql://bienhoa.cf:5432/blog_dev?useSSL=false
+        url: jdbc:postgresql://bienhoa.cf:5432/blog_dev?currentSchema=blog_dev
         user: dev
     jpa:
         generate-ddl: true
