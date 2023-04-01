@@ -9,16 +9,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
 @RestController
 @RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + PostRoutes.BASE_URL)
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
 
-    @GetMapping()
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getAllPosts(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
-                                         @RequestParam(name = "limit", defaultValue = "10") final Integer limit) {
-        var postList = postService.getAllPosts(offset, limit);
+                                         @RequestParam(name = "limit", defaultValue = "10") final Integer limit, @PathVariable final UUID userId) {
+        var postList = postService.getAllPosts(offset, limit, userId);
         return ResponseEntityBuilder
                 .getBuilder()
                 .setDetails(postList)
@@ -26,19 +27,19 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPostById(final @PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getPostById(@PathVariable(value = "id") final UUID id) {
         var post = postService.getPostById(id);
         return ResponseEntity.ok(post);
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<?> getAllPostsByCategoryId(final @PathVariable(value = "categoryId") Long categoryId) {
+    public ResponseEntity<?> getAllPostsByCategoryId(@PathVariable(value = "categoryId") final UUID categoryId) {
         var postList = postService.getAllPostsByCategoryId(categoryId);
         return ResponseEntity.ok(postList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(final @PathVariable(value = "id") Long id,
+    public ResponseEntity<?> updatePost(@PathVariable(value = "id") final UUID id,
                                         final PostRequest postRequest) {
         var post = postService.updatePost(id, postRequest);
         return ResponseEntity.ok(post);

@@ -5,17 +5,18 @@ import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.response.PostResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PostService {
-    PaginationPage<PostResponse> getAllPosts(Integer page, Integer size);
+    PaginationPage<PostResponse> getAllPosts(Integer page, Integer size, UUID userId);
 
-    List<PostResponse> getAllPostsByCategoryId(Long categoryId);
+    List<PostResponse> getAllPostsByCategoryId(UUID categoryId);
 
-    PostResponse getPostById(Long id);
+    PostResponse getPostById(UUID id);
 
     PostResponse createPost(PostRequest postRequest);
 
 
-    PostResponse updatePost(Long id, PostRequest postRequest);
+    PostResponse updatePost(UUID id, PostRequest postRequest);
 
 }
