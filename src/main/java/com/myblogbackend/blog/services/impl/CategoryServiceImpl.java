@@ -9,10 +9,8 @@ import com.myblogbackend.blog.request.CategoryRequest;
 import com.myblogbackend.blog.response.CategoryResponse;
 import com.myblogbackend.blog.services.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -47,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse createCategory(final CategoryRequest categoryRequest) {
-        var category = categoryMapper.toCategoryEntityFromCategoryRequest(categoryRequest);
+        var category = categoryMapper.toCategoryEntity(categoryRequest);
         var createdCategory = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(createdCategory);
     }

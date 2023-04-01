@@ -2,7 +2,6 @@ package com.myblogbackend.blog.controllers;
 
 import com.myblogbackend.blog.controllers.route.CommonRoutes;
 import com.myblogbackend.blog.controllers.route.PostRoutes;
-import com.myblogbackend.blog.models.PostEntity;
 import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.response.ResponseEntityBuilder;
@@ -12,29 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
 @RestController
 @RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + PostRoutes.BASE_URL)
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
 
-    @GetMapping()
-    public ResponseEntity<?> getAllPosts(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
-                                         @RequestParam(name = "limit", defaultValue = "10") final Integer limit) {
-        var post = postService.getAllPosts(offset, limit);
-        return ResponseEntityBuilder
-                .getBuilder()
-                .setDetails(post)
-                .build();
-    }
     @PostMapping
     public ResponseEntity<?> createPost(final PostRequest postRequest) {
         PostResponse post = postService.createPost(postRequest);
-        return  ResponseEntity.ok(post);
+        return ResponseEntity.ok(post);
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<?> getAllPostsByUserId(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
-                                         @RequestParam(name = "limit", defaultValue = "10") final Integer limit, @PathVariable final UUID userId) {
+                                                 @RequestParam(name = "limit", defaultValue = "10") final Integer limit, @PathVariable final UUID userId) {
         var postList = postService.getAllPostsByUserId(offset, limit, userId);
         return ResponseEntityBuilder
                 .getBuilder()

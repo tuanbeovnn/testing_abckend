@@ -15,6 +15,6 @@ public interface CategoryMapper {
 
     List<CategoryResponse> toListCategoryResponse(List<CategoryEntity> categoryEntityList);
 
-    CategoryEntity toCategoryEntityFromCategoryRequest(CategoryRequest categoryRequest);
+    CategoryEntity toCategoryEntity(CategoryRequest categoryRequest);
 }
 

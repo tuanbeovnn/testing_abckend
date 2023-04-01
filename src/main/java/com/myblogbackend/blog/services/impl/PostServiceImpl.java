@@ -54,21 +54,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PaginationPage<PostResponse> getAllPosts(final Integer offset, final Integer limited) {
-        var pageable = new OffsetPageRequest(offset, limited);
-        var postEntities = postRepository.findAll(pageable);
-        var postResponses = postEntities.getContent().stream()
-                .map(postMapper::toPostResponse)
-                .collect(Collectors.toList());
-        return new PaginationPage<PostResponse>()
-                .setRecords(postResponses)
-                .setOffset(postEntities.getNumber())
-                .setLimit(postEntities.getSize())
-                .setTotalRecords(postEntities.getTotalElements());
-
-    }
-
-    @Override
     public PaginationPage<PostResponse> getAllPostsByCategoryId(final Integer offset, final Integer limited, final UUID categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new BlogLangException(ErrorMessage.NOT_FOUND);
