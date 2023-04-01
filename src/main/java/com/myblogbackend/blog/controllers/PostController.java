@@ -2,7 +2,9 @@ package com.myblogbackend.blog.controllers;
 
 import com.myblogbackend.blog.controllers.route.CommonRoutes;
 import com.myblogbackend.blog.controllers.route.PostRoutes;
+import com.myblogbackend.blog.models.PostEntity;
 import com.myblogbackend.blog.request.PostRequest;
+import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.response.ResponseEntityBuilder;
 import com.myblogbackend.blog.services.PostService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,11 @@ public class PostController {
                 .setDetails(post)
                 .build();
     }
-
+    @PostMapping
+    public ResponseEntity<?> createPost(final PostRequest postRequest) {
+        PostResponse post = postService.createPost(postRequest);
+        return  ResponseEntity.ok(post);
+    }
     @GetMapping("/{userId}")
     public ResponseEntity<?> getAllPostsByUserId(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
                                          @RequestParam(name = "limit", defaultValue = "10") final Integer limit, @PathVariable final UUID userId) {
