@@ -1,4 +1,4 @@
-ALTER TABLE blog_dev.category
+ALTER TABLE blog_dev.categories
     ADD COLUMN created_date TIMESTAMP,
     ADD COLUMN modified_date TIMESTAMP,
     ADD COLUMN created_by VARCHAR(20),
