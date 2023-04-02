@@ -2,6 +2,7 @@ package com.myblogbackend.blog.post;
 
 import com.myblogbackend.blog.models.CategoryEntity;
 import com.myblogbackend.blog.models.PostEntity;
+import com.myblogbackend.blog.request.CategoryRequest;
 import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.response.CategoryResponse;
 import com.myblogbackend.blog.response.PostResponse;
@@ -19,10 +20,18 @@ public final class PostsTestApi {
                 .build();
     }
 
-    public static PostRequest createPostRequestData() {
+    public static CategoryResponse makeCategoryResponse(UUID id, final String name) {
+        return CategoryResponse.builder()
+                .id(id)
+                .name(name)
+                .build();
+    }
+
+    public static PostRequest createPostRequestData(UUID uuid) {
         return PostRequest.builder()
                 .title("Post A")
                 .content("Post A content")
+                .categoryId(uuid)
                 .build();
     }
 
@@ -42,9 +51,14 @@ public final class PostsTestApi {
                 .build();
     }
 
-    public static CategoryEntity prepareCategoryForCreating(final UUID uuid) {
+    public static CategoryEntity prepareCategoryForCreating() {
         return CategoryEntity.builder()
-                .id(uuid)
+                .name("Category A")
+                .build();
+    }
+
+    public static CategoryRequest prepareCategoryForRequesting() {
+        return CategoryRequest.builder()
                 .name("Category A")
                 .build();
     }

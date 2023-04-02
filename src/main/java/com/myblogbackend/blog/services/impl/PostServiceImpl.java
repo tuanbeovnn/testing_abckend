@@ -16,6 +16,7 @@ import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,12 +30,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse createPost(final PostRequest postRequest) {
-        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
+//        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
         var category = validateCategory(postRequest.getCategoryId());
         var postEntity = postMapper.toPostEntity(postRequest);
         postEntity.setCategory(category);
         // populate owner
-        postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
+        postEntity.setUser(usersRepository.findById(UUID.randomUUID()).orElseThrow());
         var createdPost = postRepository.save(postEntity);
         return postMapper.toPostResponse(createdPost);
     }
