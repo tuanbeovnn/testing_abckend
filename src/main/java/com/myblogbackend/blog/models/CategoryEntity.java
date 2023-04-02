@@ -27,4 +27,7 @@ public class CategoryEntity extends BaseEntity {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<PostEntity> posts;
 
+    public CategoryEntity(String name) {
+        this.name = name;
+    }
 }
