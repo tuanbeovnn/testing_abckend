@@ -21,10 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.UUID;
 
 import static com.myblogbackend.blog.ResponseBodyMatcher.responseBody;
-import static com.myblogbackend.blog.category.CategoryTestApi.makeCategoryForSaving;
-import static com.myblogbackend.blog.category.CategoryTestApi.prepareCategoryForRequesting;
-import static com.myblogbackend.blog.category.CategoryTestApi.toCategoryResponse;
-import static org.mockito.ArgumentMatchers.any;
+import static com.myblogbackend.blog.category.CategoryTestApi.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,7 +41,8 @@ public class CategoryApiDelegateImplTest {
         var categoryRequest = prepareCategoryForRequesting();
         var category = makeCategoryForSaving(categoryId);
 
-        Mockito.when(categoryRepository.save(any())).thenReturn(category);
+        Mockito.when(categoryRepository.save(Mockito.any()))
+                .thenReturn(category);
 
         var expectedCategory = toCategoryResponse(category);
 
