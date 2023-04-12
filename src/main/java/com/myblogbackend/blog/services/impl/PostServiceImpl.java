@@ -28,12 +28,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse createPost(final PostRequest postRequest) {
-//        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
+        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
         var category = validateCategory(postRequest.getCategoryId());
         var postEntity = postMapper.toPostEntity(postRequest);
         postEntity.setCategory(category);
         // populate owner
-        postEntity.setUser(usersRepository.findById(UUID.randomUUID()).orElseThrow());
+        postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
         var createdPost = postRepository.save(postEntity);
         return postMapper.toPostResponse(createdPost);
     }
@@ -54,9 +54,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PaginationPage<PostResponse> getAllPostsByCategoryId(final Integer offset, final Integer limited, final UUID categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new BlogLangException(ErrorMessage.NOT_FOUND);
-        }
         var pageable = new OffsetPageRequest(offset, limited);
         var posts = postRepository.findAllByCategoryId(pageable, categoryId);
         var postResponses = posts.getContent().stream()

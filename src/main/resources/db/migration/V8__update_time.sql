@@ -28,7 +28,10 @@ ALTER TABLE users
     ADD COLUMN created_by VARCHAR(20),
     ADD COLUMN modified_by VARCHAR(20);
 
-
-
+ALTER TABLE comments
+    ADD COLUMN created_date TIMESTAMP,
+    ADD COLUMN modified_date TIMESTAMP,
+    ADD COLUMN created_by VARCHAR(20),
+    ADD COLUMN modified_by VARCHAR(20);
 
 

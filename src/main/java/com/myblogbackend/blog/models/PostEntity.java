@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,9 +27,11 @@ public class PostEntity extends BaseEntity {
 
     @Column
     private String content;
-
     @Column
     private Boolean approved;
+
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="category_id" )
@@ -37,7 +40,9 @@ public class PostEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id" )
     private UserEntity user;
-    public void approved() {
-        this.approved = true;
-    }
+
+    // One-to-Many relationship with Comments table
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
+
 }

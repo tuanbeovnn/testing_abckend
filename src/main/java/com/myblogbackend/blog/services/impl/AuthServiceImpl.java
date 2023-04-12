@@ -1,6 +1,7 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.request.*;
+import com.myblogbackend.blog.constant.ErrorMessage;
+import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.exception.TokenRefreshException;
 import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.RefreshTokenEntity;
@@ -9,6 +10,10 @@ import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.repositories.RefreshTokenRepository;
 import com.myblogbackend.blog.repositories.UserDeviceRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
+import com.myblogbackend.blog.request.DeviceInfoRequest;
+import com.myblogbackend.blog.request.LoginFormRequest;
+import com.myblogbackend.blog.request.SignUpFormRequest;
+import com.myblogbackend.blog.request.TokenRefreshRequest;
 import com.myblogbackend.blog.response.JwtResponse;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.JwtProvider;
@@ -16,6 +21,7 @@ import com.myblogbackend.blog.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -118,12 +124,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Authentication authenticateUser(final LoginFormRequest loginRequest) {
-        return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+            return authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new BlogLangException(ErrorMessage.USER_NOT_AUTHORIZATION, e);
+        }
     }
 
     private RefreshTokenEntity createRefreshToken(final LoginFormRequest loginRequest, final UserEntity userEntity) {

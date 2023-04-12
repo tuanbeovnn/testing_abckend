@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -39,6 +40,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "provider")
     @Enumerated(EnumType.STRING)
     private OAuth2Provider provider;
+
+    // One-to-Many relationship with Comments table
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
 
 
     public void activate() {
