@@ -12,6 +12,7 @@ import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.services.PostService;
+import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
