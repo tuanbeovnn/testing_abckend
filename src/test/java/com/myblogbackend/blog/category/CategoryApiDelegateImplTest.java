@@ -2,10 +2,7 @@ package com.myblogbackend.blog.category;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myblogbackend.blog.IntegrationTestUtil;
-import com.myblogbackend.blog.mapper.CategoryMapper;
-import com.myblogbackend.blog.models.CategoryEntity;
 import com.myblogbackend.blog.repositories.CategoryRepository;
-import com.myblogbackend.blog.request.CategoryRequest;
 import com.myblogbackend.blog.response.CategoryResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +23,7 @@ import java.util.UUID;
 import static com.myblogbackend.blog.ResponseBodyMatcher.responseBody;
 import static com.myblogbackend.blog.category.CategoryTestApi.makeCategoryForSaving;
 import static com.myblogbackend.blog.category.CategoryTestApi.prepareCategoryForRequesting;
+import static com.myblogbackend.blog.category.CategoryTestApi.toCategoryResponse;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
@@ -39,8 +37,6 @@ public class CategoryApiDelegateImplTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private CategoryMapper categoryMapper;
 
     @Test
     public void givenMoreComplexCategoryData_whenSendData_thenReturnsCategoryCreated() throws Exception {
@@ -50,7 +46,7 @@ public class CategoryApiDelegateImplTest {
 
         Mockito.when(categoryRepository.save(any())).thenReturn(category);
 
-        var expectedCategory = categoryMapper.toCategoryResponse(category);
+        var expectedCategory = toCategoryResponse(category);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/category")
                         .content(IntegrationTestUtil.asJsonString(categoryRequest))

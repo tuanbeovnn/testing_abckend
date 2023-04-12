@@ -31,5 +31,11 @@ public final class CategoryTestApi {
                 .name("Category A")
                 .build();
     }
+    public static CategoryResponse toCategoryResponse(CategoryEntity categoryEntity) {
+        return CategoryResponse.builder()
+                .id(categoryEntity.getId())
+                .name(categoryEntity.getName())
+                .build();
+    }
 
 }
