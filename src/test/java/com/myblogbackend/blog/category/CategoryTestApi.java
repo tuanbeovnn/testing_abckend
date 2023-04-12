@@ -19,7 +19,7 @@ public final class CategoryTestApi {
         );
     }
 
-    public static CategoryEntity makeCategoryForSaving(UUID id) {
+    public static CategoryEntity makeCategoryForSaving(final UUID id) {
         return CategoryEntity.builder()
                 .id(id)
                 .name("Category A")
@@ -31,7 +31,7 @@ public final class CategoryTestApi {
                 .name("Category A")
                 .build();
     }
-    public static CategoryResponse toCategoryResponse(CategoryEntity categoryEntity) {
+    public static CategoryResponse toCategoryResponse(final CategoryEntity categoryEntity) {
         return CategoryResponse.builder()
                 .id(categoryEntity.getId())
                 .name(categoryEntity.getName())

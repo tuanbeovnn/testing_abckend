@@ -10,7 +10,7 @@ public class ResponseBodyMatcher {
         return new ResponseBodyMatcher();
     }
 
-    public <T>ResultMatcher containsObjectBody(Object objectExpected, Class<T> targetClass, ObjectMapper objectMapper) {
+    public <T>ResultMatcher containsObjectBody(final Object objectExpected, final Class<T> targetClass, final ObjectMapper objectMapper) {
         return mvc -> {
             String json = mvc.getResponse().getContentAsString();
             T actualObject = objectMapper.readValue(json, targetClass);

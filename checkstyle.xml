@@ -6,7 +6,7 @@
     <module name="TreeWalker">
         <!-- Checks for imports -->
         <module name="UnusedImports"/>
-        <module name="AvoidStaticImport"/>
+<!--        <module name="AvoidStaticImport"/>-->
         <module name="PackageDeclaration"/>
         <module name="IllegalImport"/>
         <!-- Whitespace after brackets -->
