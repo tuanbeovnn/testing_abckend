@@ -42,20 +42,19 @@ public class CategoryApiDelegateImplTest {
 
     @Test
     public void givenMoreComplexCategoryData_whenSendData_thenReturnsCategoryCreated() throws Exception {
-        UUID categoryId = UUID.randomUUID();
-        CategoryRequest categoryRequest = prepareCategoryForRequesting();
-        CategoryEntity category = makeCategoryForSaving(categoryId);
+        var categoryId = UUID.randomUUID();
+        var categoryRequest = prepareCategoryForRequesting();
+        var category = makeCategoryForSaving(categoryId);
 
         Mockito.when(categoryRepository.save(any())).thenReturn(category);
 
-        CategoryResponse expectedCategory = categoryMapper.toCategoryResponse(category);
+        var expectedCategory = categoryMapper.toCategoryResponse(category);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/category")
                         .content(IntegrationTestUtil.asJsonString(categoryRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(responseBody().containsObjectBody(expectedCategory, CategoryResponse.class, objectMapper));
-
     }
 
 
