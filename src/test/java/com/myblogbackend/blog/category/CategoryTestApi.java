@@ -21,6 +21,7 @@ public final class CategoryTestApi {
 
     public static CategoryEntity makeCategoryForSaving(UUID id) {
         return CategoryEntity.builder()
+                .id(id)
                 .name("Category A")
                 .build();
     }
@@ -30,20 +31,5 @@ public final class CategoryTestApi {
                 .name("Category A")
                 .build();
     }
-
-    public static CategoryResponse prepareCategoryForResponse(final UUID id, final String name) {
-        return CategoryResponse.builder()
-                .id(id)
-                .name(name)
-                .build();
-    }
-
-    public static CategoryResponse createCategoryData() {
-        return CategoryResponse.builder()
-                .id(UUID.randomUUID())
-                .name("Category A")
-                .build();
-    }
-
 
 }
