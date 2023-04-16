@@ -1,22 +1,19 @@
 package com.myblogbackend.blog.response;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class JwtResponse {
-    private String accessToken;
-    private String refreshToken;
-    private String tokenType;
-    private Long expiryDuration;
+    private final String accessToken;
+    private final String refreshToken;
+    private final Long expiryDuration;
+    private static final String tokenType = "Bearer ";
 
-    public JwtResponse(final String accessToken, final String refreshToken, final Long expiryDuration) {
+    public JwtResponse(String accessToken, String refreshToken, Long expiryDuration) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiryDuration = expiryDuration;
-        tokenType = "Bearer ";
     }
 }
