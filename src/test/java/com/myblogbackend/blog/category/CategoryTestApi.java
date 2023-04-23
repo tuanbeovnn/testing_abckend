@@ -10,15 +10,6 @@ import java.util.UUID;
 public final class CategoryTestApi {
 
 
-    public static UserPrincipal getUserInfo() {
-        return new UserPrincipal(
-                UUID.randomUUID(),
-                "Test",
-                "test@example.com",
-                "xxx-xxx-xxx"
-        );
-    }
-
     public static CategoryEntity makeCategoryForSaving(final UUID id) {
         return CategoryEntity.builder()
                 .id(id)
