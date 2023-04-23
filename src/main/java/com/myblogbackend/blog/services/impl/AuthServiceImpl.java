@@ -1,6 +1,7 @@
 package com.myblogbackend.blog.services.impl;
 
 import com.myblogbackend.blog.constant.ErrorMessage;
+import com.myblogbackend.blog.enums.OAuth2Provider;
 import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.exception.TokenRefreshException;
 import com.myblogbackend.blog.mapper.UserMapper;
@@ -18,8 +19,12 @@ import com.myblogbackend.blog.response.JwtResponse;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.JwtProvider;
 import com.myblogbackend.blog.services.AuthService;
+import com.myblogbackend.blog.strategies.OnAuthListenerEvent;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -34,6 +40,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     public static final long ONE_HOUR_IN_MILLIS = 3600000;
@@ -44,6 +51,8 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public JwtResponse userLogin(final LoginFormRequest loginRequest) {
@@ -59,15 +68,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public UserResponse registerUser(final SignUpFormRequest signUpRequest, final HttpServletRequest request) {
-        var userEntity = usersRepository.findByEmail(signUpRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Fail -> Email is already in use!"));
+        var userEntityOPT = usersRepository.findByEmail(signUpRequest.getEmail());
+        if (userEntityOPT.isPresent()) {
+            throw new RuntimeException("Email already exits");
+        }
+        var createdUser = new UserEntity();
         // Creating user's account
-        userEntity.setName(signUpRequest.getName());
-        userEntity.setEmail(signUpRequest.getEmail());
-        userEntity.setPassword(encoder.encode(signUpRequest.getPassword()));
-        userEntity.activate();
-        UserEntity result = usersRepository.save(userEntity);
+        createdUser.setEmail(signUpRequest.getEmail());
+        createdUser.setPassword(encoder.encode(signUpRequest.getPassword()));
+        createdUser.activate();
+        createdUser.setName(signUpRequest.getName());
+        createdUser.setProvider(OAuth2Provider.LOCAL);
+        UserEntity result = usersRepository.save(createdUser);
+        if (!ObjectUtils.isEmpty(result)) {
+            eventPublisher.publishEvent(
+                    new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
+            );
+        }
         return userMapper.toUserDTO(result);
     }
 

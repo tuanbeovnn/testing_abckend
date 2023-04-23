@@ -5,18 +5,24 @@ import com.myblogbackend.blog.exception.ResourceNotFoundException;
 import com.myblogbackend.blog.exception.UserLogoutException;
 import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.UserEntity;
+import com.myblogbackend.blog.models.UserVerificationTokenEntity;
 import com.myblogbackend.blog.repositories.RefreshTokenRepository;
+import com.myblogbackend.blog.repositories.TokenRepository;
 import com.myblogbackend.blog.repositories.UserDeviceRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.request.LogOutRequest;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.UserPrincipal;
 import com.myblogbackend.blog.services.UserService;
+import com.myblogbackend.blog.strategies.NotificationType;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -28,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final UsersRepository usersRepository;
 
     private final UserMapper userMapper;
+
+    private final TokenRepository tokenRepository;
 
     @Override
     public void logoutUser(final LogOutRequest logOutRequest, final UserPrincipal currentUser) {
@@ -54,8 +62,36 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDTO(userEntity);
     }
 
+    @Override
+    public void createVerificationToken(final UserEntity userEntity, final String token, final NotificationType notificationType) {
+        int exp = 0;
+        switch (notificationType) {
+            case EMAIL_REGISTRATION_CONFIRMATION:
+                exp = 1440;
+                break;
+//            case EMAIL_CHANGE_CONFIRMATION:
+//                exp = 10;
+//                break;
+            default:
+        }
+
+        UserVerificationTokenEntity myToken = UserVerificationTokenEntity.builder()
+                .verificationToken(token)
+                .user(userEntity)
+                .expDate(calculateExpiryDate(exp))
+                .build();
+        tokenRepository.save(myToken);
+    }
+
     private UserEntity getUserById(final UUID id) {
         return usersRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    }
+
+    private Date calculateExpiryDate(final int expiryTimeInMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
     }
 }

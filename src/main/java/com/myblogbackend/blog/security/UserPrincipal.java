@@ -14,7 +14,6 @@ public class UserPrincipal implements UserDetails {
 
     private final UUID id;
 
-    private final String name;
 
     private final String email;
 
@@ -23,10 +22,8 @@ public class UserPrincipal implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public UserPrincipal(final UUID id, final String name,
-                         final String email, final String password) {
+    public UserPrincipal(final UUID id, final String email, final String password) {
         this.id = id;
-        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -34,7 +31,6 @@ public class UserPrincipal implements UserDetails {
     public static UserPrincipal build(final UserEntity userEntity) {
         return new UserPrincipal(
                 userEntity.getId(),
-                userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getPassword()
         );
@@ -42,10 +38,6 @@ public class UserPrincipal implements UserDetails {
 
     public UUID getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getEmail() {

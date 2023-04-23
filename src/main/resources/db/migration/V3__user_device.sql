@@ -3,5 +3,9 @@ CREATE TABLE blog_dev.user_device (
     user_id           UUID NOT NULL REFERENCES users(id),
     device_type       VARCHAR(255),
     device_id         VARCHAR(255) NOT NULL,
-    is_refresh_active boolean DEFAULT false
+    is_refresh_active boolean DEFAULT false,
+    created_date       TIMESTAMP,
+    modified_date      TIMESTAMP,
+    created_by         VARCHAR(20),
+    modified_by        VARCHAR(20)
 );

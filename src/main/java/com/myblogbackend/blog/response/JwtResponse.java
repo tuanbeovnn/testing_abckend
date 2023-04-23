@@ -11,7 +11,7 @@ public class JwtResponse {
     private final Long expiryDuration;
     private static final String tokenType = "Bearer ";
 
-    public JwtResponse(String accessToken, String refreshToken, Long expiryDuration) {
+    public JwtResponse(final String accessToken, final String refreshToken, final Long expiryDuration) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiryDuration = expiryDuration;

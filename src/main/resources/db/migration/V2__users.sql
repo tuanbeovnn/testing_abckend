@@ -4,5 +4,9 @@ CREATE TABLE blog_dev.users (
     password VARCHAR(255) NOT NULL,
     name     VARCHAR(255) NOT NULL,
     active   boolean NOT NULL DEFAULT false,
-    provider VARCHAR(20) NOT NULL DEFAULT 'LOCAL'
+    provider VARCHAR(20) NOT NULL DEFAULT 'LOCAL',
+    created_date       TIMESTAMP,
+    modified_date      TIMESTAMP,
+    created_by         VARCHAR(20),
+    modified_by        VARCHAR(20)
 );
