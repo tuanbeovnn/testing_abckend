@@ -2,6 +2,8 @@ package com.myblogbackend.blog.strategies;
 
 
 import com.myblogbackend.blog.constant.ErrorMessage;
+import com.myblogbackend.blog.dtos.NotificationRequestDTO;
+import com.myblogbackend.blog.enums.NotificationResult;
 import com.myblogbackend.blog.exception.BlogLangException;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;

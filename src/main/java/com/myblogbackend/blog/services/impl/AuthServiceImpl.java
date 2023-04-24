@@ -19,7 +19,7 @@ import com.myblogbackend.blog.response.JwtResponse;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.JwtProvider;
 import com.myblogbackend.blog.services.AuthService;
-import com.myblogbackend.blog.strategies.OnAuthListenerEvent;
+import com.myblogbackend.blog.event.OnAuthListenerEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.dtos;
 
+import com.myblogbackend.blog.strategies.NotificationResponseCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -14,7 +14,7 @@ import com.myblogbackend.blog.request.LogOutRequest;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.UserPrincipal;
 import com.myblogbackend.blog.services.UserService;
-import com.myblogbackend.blog.strategies.NotificationType;
+import com.myblogbackend.blog.enums.NotificationType;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

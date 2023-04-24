@@ -1,6 +1,6 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.dtos;
 
-import com.myblogbackend.blog.strategies.NotificationType;
+import com.myblogbackend.blog.enums.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

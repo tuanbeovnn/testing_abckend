@@ -1,5 +1,6 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.dtos;
 
+import com.myblogbackend.blog.dtos.EmailAdditionalPropertiesDTO;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

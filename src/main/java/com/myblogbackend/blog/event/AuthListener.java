@@ -1,7 +1,12 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.event;
 
 
 import com.myblogbackend.blog.services.UserService;
+import com.myblogbackend.blog.dtos.EmailAdditionalPropertiesDTO;
+import com.myblogbackend.blog.dtos.EmailMessageDTO;
+import com.myblogbackend.blog.services.NotificationManagementService;
+import com.myblogbackend.blog.dtos.NotificationRequestDTO;
+import com.myblogbackend.blog.enums.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.services;
 
 
 import freemarker.template.TemplateException;

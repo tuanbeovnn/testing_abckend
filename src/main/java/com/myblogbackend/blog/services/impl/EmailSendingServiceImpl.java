@@ -1,6 +1,7 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.services.impl;
 
 
+import com.myblogbackend.blog.services.EmailSendingService;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;

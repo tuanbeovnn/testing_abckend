@@ -4,7 +4,7 @@ import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.request.LogOutRequest;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.UserPrincipal;
-import com.myblogbackend.blog.strategies.NotificationType;
+import com.myblogbackend.blog.enums.NotificationType;
 
 import java.util.UUID;
 

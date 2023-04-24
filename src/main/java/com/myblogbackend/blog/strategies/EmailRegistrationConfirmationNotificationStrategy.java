@@ -1,6 +1,11 @@
 package com.myblogbackend.blog.strategies;
 
 
+import com.myblogbackend.blog.config.mail.EmailProperties;
+import com.myblogbackend.blog.dtos.NotificationRequestDTO;
+import com.myblogbackend.blog.enums.NotificationResult;
+import com.myblogbackend.blog.mapper.NotificationMessageMapper;
+import com.myblogbackend.blog.services.EmailSendingService;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;

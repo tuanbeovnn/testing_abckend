@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

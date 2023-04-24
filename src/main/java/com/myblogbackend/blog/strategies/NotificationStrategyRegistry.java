@@ -1,6 +1,6 @@
 package com.myblogbackend.blog.strategies;
 
-import com.myblogbackend.blog.strategies.NotificationType;
+import com.myblogbackend.blog.enums.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

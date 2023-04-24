@@ -1,4 +1,4 @@
-package com.myblogbackend.blog.strategies;
+package com.myblogbackend.blog.config.mail;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
