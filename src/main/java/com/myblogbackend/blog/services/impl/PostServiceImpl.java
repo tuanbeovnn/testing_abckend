@@ -14,6 +14,9 @@ import com.myblogbackend.blog.response.PostResponse;
 import com.myblogbackend.blog.services.PostService;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,7 +24,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService {
+    private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final UsersRepository usersRepository;
@@ -29,14 +34,24 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse createPost(final PostRequest postRequest) {
+        // Get the signed-in user from the JWT token
         var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
+        // Validate the category ID and return the corresponding category
         var category = validateCategory(postRequest.getCategoryId());
+        // Map the post request to a post entity and set its category
         var postEntity = postMapper.toPostEntity(postRequest);
         postEntity.setCategory(category);
-        // populate owner
+        // Set the post's owner to the signed-in user
         postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
-        var createdPost = postRepository.save(postEntity);
-        return postMapper.toPostResponse(createdPost);
+        try {
+            // Log a success message
+            var createdPost = postRepository.save(postEntity);
+            logger.info("Post was created with id: {}", createdPost.getId());
+            return postMapper.toPostResponse(createdPost);
+        } catch (Exception e) {
+            logger.error("Failed to create post", e);
+            throw new RuntimeException("Failed to create post");
+        }
     }
 
     @Override
