@@ -34,16 +34,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse createPost(final PostRequest postRequest) {
-        // Get the signed-in user from the JWT token
-        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
-        // Validate the category ID and return the corresponding category
-        var category = validateCategory(postRequest.getCategoryId());
-        // Map the post request to a post entity and set its category
-        var postEntity = postMapper.toPostEntity(postRequest);
-        postEntity.setCategory(category);
-        // Set the post's owner to the signed-in user
-        postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
         try {
+            // Get the signed-in user from the JWT token
+            var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
+            // Validate the category ID and return the corresponding category
+            var category = validateCategory(postRequest.getCategoryId());
+            // Map the post request to a post entity and set its category
+            var postEntity = postMapper.toPostEntity(postRequest);
+            postEntity.setCategory(category);
+            // Set the post's owner to the signed-in user
+            postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
+
             // Log a success message
             var createdPost = postRepository.save(postEntity);
             logger.info("Post was created with id: {}", createdPost.getId());
