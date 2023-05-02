@@ -44,7 +44,6 @@ public class PostServiceImpl implements PostService {
             postEntity.setCategory(category);
             // Set the post's owner to the signed-in user
             postEntity.setUser(usersRepository.findById(signedInUser.getId()).orElseThrow());
-
             // Log a success message
             var createdPost = postRepository.save(postEntity);
             logger.info("Post was created with id: {}", createdPost.getId());
@@ -57,16 +56,22 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PaginationPage<PostResponse> getAllPostsByUserId(final Integer offset, final Integer limited, final UUID userId) {
-        var pageable = new OffsetPageRequest(offset, limited);
-        var postEntities = postRepository.findAllByUserId(userId, pageable);
-        var postResponses = postEntities.getContent().stream()
-                .map(postMapper::toPostResponse)
-                .collect(Collectors.toList());
-        return new PaginationPage<PostResponse>()
-                .setRecords(postResponses)
-                .setOffset(postEntities.getNumber())
-                .setLimit(postEntities.getSize())
-                .setTotalRecords(postEntities.getTotalElements());
+        try {
+            var pageable = new OffsetPageRequest(offset, limited);
+            var postEntities = postRepository.findAllByUserId(userId, pageable);
+            var postResponses = postEntities.getContent().stream()
+                    .map(postMapper::toPostResponse)
+                    .collect(Collectors.toList());
+            logger.info("Post get succeeded with offset: {} and limited {}", postEntities.getNumber(), postEntities.getSize());
+            return new PaginationPage<PostResponse>()
+                    .setRecords(postResponses)
+                    .setOffset(postEntities.getNumber())
+                    .setLimit(postEntities.getSize())
+                    .setTotalRecords(postEntities.getTotalElements());
+        } catch (Exception e) {
+            logger.error("Failed to get list post", e);
+            throw new RuntimeException("Failed to get list post");
+        }
     }
 
     @Override
