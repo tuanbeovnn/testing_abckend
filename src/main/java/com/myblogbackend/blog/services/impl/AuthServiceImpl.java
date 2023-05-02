@@ -2,6 +2,7 @@ package com.myblogbackend.blog.services.impl;
 
 import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.enums.OAuth2Provider;
+import com.myblogbackend.blog.event.OnAuthListenerEvent;
 import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.exception.TokenRefreshException;
 import com.myblogbackend.blog.mapper.UserMapper;
@@ -19,7 +20,6 @@ import com.myblogbackend.blog.response.JwtResponse;
 import com.myblogbackend.blog.response.UserResponse;
 import com.myblogbackend.blog.security.JwtProvider;
 import com.myblogbackend.blog.services.AuthService;
-import com.myblogbackend.blog.event.OnAuthListenerEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -83,9 +83,13 @@ public class AuthServiceImpl implements AuthService {
         createdUser.setProvider(OAuth2Provider.LOCAL);
         UserEntity result = usersRepository.save(createdUser);
         if (!ObjectUtils.isEmpty(result)) {
-            eventPublisher.publishEvent(
-                    new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
-            );
+            try {
+                eventPublisher.publishEvent(
+                        new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
+                );
+            } catch (Exception ex) {
+                throw new BlogLangException(ErrorMessage.EMAIL_SEND_FAILED);
+            }
         }
         return userMapper.toUserDTO(result);
     }
