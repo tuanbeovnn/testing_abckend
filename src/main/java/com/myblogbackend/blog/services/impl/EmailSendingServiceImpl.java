@@ -1,6 +1,8 @@
 package com.myblogbackend.blog.services.impl;
 
 
+import com.myblogbackend.blog.constant.ErrorMessage;
+import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.services.EmailSendingService;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -33,23 +35,28 @@ public class EmailSendingServiceImpl implements EmailSendingService {
     @Async
     public void send(final String templateName,
                      final SimpleMailMessage simpleMailMessage,
-                     final Map<String, Object> contentBindings) throws MessagingException, TemplateException, IOException {
-        var mimeMessage = javaMailSender.createMimeMessage();
+                     final Map<String, Object> contentBindings) {
 
-        var mimeMessageHelper = new MimeMessageHelper(
-                mimeMessage,
-                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
+        try {
+            var mimeMessage = javaMailSender.createMimeMessage();
 
-        var freemarkerTemplate = freemarkerTemplateConfig.getTemplate(templateName);
-        var parsedHTML = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, contentBindings);
+            var mimeMessageHelper = new MimeMessageHelper(
+                    mimeMessage,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
 
-        mimeMessageHelper.setSubject(Objects.requireNonNullElse(simpleMailMessage.getSubject(), ""));
-        mimeMessageHelper.setFrom(Objects.requireNonNull(simpleMailMessage.getFrom()));
-        mimeMessageHelper.setTo(Objects.requireNonNull(simpleMailMessage.getTo()));
-        mimeMessageHelper.setText(parsedHTML, true);
+            var freemarkerTemplate = freemarkerTemplateConfig.getTemplate(templateName);
+            var parsedHTML = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, contentBindings);
 
-        javaMailSender.send(mimeMessage);
-        logger.info("Email sent successfully.");
+            mimeMessageHelper.setSubject(Objects.requireNonNullElse(simpleMailMessage.getSubject(), ""));
+            mimeMessageHelper.setFrom(Objects.requireNonNull(simpleMailMessage.getFrom()));
+            mimeMessageHelper.setTo(Objects.requireNonNull(simpleMailMessage.getTo()));
+            mimeMessageHelper.setText(parsedHTML, true);
+
+            javaMailSender.send(mimeMessage);
+            logger.info("Email sent successfully.");
+        } catch (MessagingException | TemplateException | IOException e) {
+            throw new BlogLangException(ErrorMessage.EMAIL_SEND_FAILED);
+        }
     }
 }

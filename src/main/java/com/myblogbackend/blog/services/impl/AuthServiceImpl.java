@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         var jwtToken = jwtProvider.generateJwtToken(authentication);
-        RefreshTokenEntity refreshTokenEntity = createRefreshToken(loginRequest, userEntity);
+        var refreshTokenEntity = createRefreshToken(loginRequest, userEntity);
         return new JwtResponse(jwtToken, refreshTokenEntity.getToken(), jwtProvider.getExpiryDuration());
     }
 
