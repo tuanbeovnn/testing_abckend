@@ -18,6 +18,8 @@ import com.myblogbackend.blog.services.UserService;
 import com.myblogbackend.blog.enums.NotificationType;
 import com.myblogbackend.blog.utils.JWTSecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
     private final UserDeviceRepository userDeviceRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -40,27 +43,44 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logoutUser(final LogOutRequest logOutRequest, final UserPrincipal currentUser) {
-        var deviceId = logOutRequest.getDeviceInfo().getDeviceId();
-        var userDevice = userDeviceRepository.findByUserId(currentUser.getId())
-                .filter(device -> device.getDeviceId().equals(deviceId))
-                .orElseThrow(() -> new UserLogoutException(logOutRequest.getDeviceInfo().getDeviceId(),
-                        "Invalid device Id supplied. No matching device found for the given user "));
-        refreshTokenRepository.deleteById(userDevice.getRefreshToken().getId());
-        var logoutSuccessEvent = new OnUserLogoutSuccessEvent(currentUser.getEmail(), logOutRequest.getToken(), logOutRequest);
-        applicationEventPublisher.publishEvent(logoutSuccessEvent);
+        try {
+            var deviceId = logOutRequest.getDeviceInfo().getDeviceId();
+            var userDevice = userDeviceRepository.findByUserId(currentUser.getId())
+                    .filter(device -> device.getDeviceId().equals(deviceId))
+                    .orElseThrow(() -> new UserLogoutException(logOutRequest.getDeviceInfo().getDeviceId(),
+                            "Invalid device Id supplied. No matching device found for the given user "));
+            refreshTokenRepository.deleteById(userDevice.getRefreshToken().getId());
+            var logoutSuccessEvent = new OnUserLogoutSuccessEvent(currentUser.getEmail(), logOutRequest.getToken(), logOutRequest);
+            applicationEventPublisher.publishEvent(logoutSuccessEvent);
+            logger.info("User logout successfully");
+        } catch (Exception e) {
+            logger.error("User failed to logout");
+        }
     }
 
     @Override
     public UserResponse findUserById(final UUID id) {
-        var userEntity = getUserById(id);
-        return userMapper.toUserDTO(userEntity);
+        try {
+            var userEntity = getUserById(id);
+            logger.info("Find user with id successfully: {}", id);
+            return userMapper.toUserDTO(userEntity);
+        } catch (Exception e) {
+            logger.error("Failed to find user by id {}", id);
+            throw new RuntimeException("Fail to find user by id");
+        }
     }
 
     @Override
     public UserResponse aboutMe() {
-        var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
-        var userEntity = getUserById(signedInUser.getId());
-        return userMapper.toUserDTO(userEntity);
+        try {
+            var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
+            var userEntity = getUserById(signedInUser.getId());
+            logger.info("Get sign in user information");
+            return userMapper.toUserDTO(userEntity);
+        } catch (Exception e) {
+            logger.error("Failed to get user's sign in information");
+            throw new RuntimeException("Failed to get user's sign in information");
+        }
     }
 
     @Override
