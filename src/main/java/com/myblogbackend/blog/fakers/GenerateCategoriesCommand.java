@@ -15,13 +15,13 @@ public class GenerateCategoriesCommand implements CommandLineRunner {
     private final CategoryService categoryService;
     private final Environment environment;
 
-    public GenerateCategoriesCommand(CategoryService categoryService, Environment environment) {
+    public GenerateCategoriesCommand(final CategoryService categoryService, final Environment environment) {
         this.categoryService = categoryService;
         this.environment = environment;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(final String... args) throws Exception {
         boolean shouldGenerate = environment.getProperty("app.generate-categories", Boolean.class, false);
         if (!shouldGenerate) {
             return;

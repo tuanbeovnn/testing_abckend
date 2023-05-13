@@ -12,7 +12,7 @@ public class BlogRuntimeException extends RuntimeException {
     public BlogRuntimeException() {
     }
 
-    public BlogRuntimeException(CommonErrorCode code) {
+    public BlogRuntimeException(final CommonErrorCode code) {
         this.code = code.code();
         this.message = code.message();
         this.status = code.status();

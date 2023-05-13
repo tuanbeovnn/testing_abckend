@@ -16,14 +16,12 @@ public enum ErrorCode implements CommonErrorCode {
     ALREADY_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "500", "Account already exist!"),
     USER_NAME_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "400", "Username or password not match!"),
     JWT_CLAIM_EMPTY(HttpStatus.UNAUTHORIZED, "401", "Claim empty"),
-    EMAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"500", "error.could not send email");
-
-
+    EMAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "500", "error.could not send email");
     private final HttpStatus status;
     private final String code;
     private final String message;
 
-    private ErrorCode(HttpStatus status, String code, String message) {
+    private ErrorCode(final HttpStatus status, final String code, final String message) {
         this.status = status;
         this.code = code;
         this.message = message;
