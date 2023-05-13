@@ -1,8 +1,8 @@
 package com.myblogbackend.blog.services.impl;
 
 
-import com.myblogbackend.blog.constant.ErrorMessage;
-import com.myblogbackend.blog.exception.BlogLangException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.services.EmailSendingService;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -56,7 +56,7 @@ public class EmailSendingServiceImpl implements EmailSendingService {
             javaMailSender.send(mimeMessage);
             logger.info("Email sent successfully.");
         } catch (MessagingException | TemplateException | IOException e) {
-            throw new BlogLangException(ErrorMessage.EMAIL_SEND_FAILED);
+            throw new BlogRuntimeException(ErrorCode.ID_NOT_FOUND);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.exception.ResourceNotFoundException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.mapper.CategoryMapper;
 import com.myblogbackend.blog.pagination.OffsetPageRequest;
 import com.myblogbackend.blog.pagination.PaginationPage;
@@ -39,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse getCategoryById(final UUID id) {
         var category = categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
+                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
         return categoryMapper.toCategoryResponse(category);
     }
 
@@ -54,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse updateCategory(final UUID id, final CategoryRequest categoryRequest) {
         var category = categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("category", "id", id));
+                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
         category.setName(categoryRequest.getName());
         var updatedCategory = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(updatedCategory);

@@ -1,10 +1,10 @@
 package com.myblogbackend.blog.strategies;
 
 
-import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.dtos.NotificationRequestDTO;
 import com.myblogbackend.blog.enums.NotificationResult;
-import com.myblogbackend.blog.exception.BlogLangException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 
@@ -17,7 +17,7 @@ public abstract class AbstractNotificationStrategy implements NotificationStrate
         try {
             return handleNotifier(requestDTO);
         } catch (Exception exception) {
-            throw new BlogLangException(ErrorMessage.EMAIL_SEND_FAILED);
+            throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
         }
     }
 

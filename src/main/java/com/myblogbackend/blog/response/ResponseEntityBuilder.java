@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Getter
 public class ResponseEntityBuilder {
-    private final Map<String, Object> map = new HashMap<>();
+    Map<String, Object> map = new HashMap<>();
 
     private ResponseEntityBuilder() {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -22,32 +22,34 @@ public class ResponseEntityBuilder {
         return new ResponseEntityBuilder();
     }
 
-    public void setCode(final int code) {
+    public ResponseEntityBuilder setCode(int code) {
         map.put("code", code);
         setSuccess(code < 400);
+        return this;
     }
 
 
-    public ResponseEntityBuilder setCode(final HttpStatus code) {
+    public ResponseEntityBuilder setCode(HttpStatus code) {
         this.setCode(code.value());
         return this;
     }
 
-    public ResponseEntityBuilder setMessage(final String message) {
+    public ResponseEntityBuilder setMessage(String message) {
         map.put("message", message);
         return this;
     }
 
-    public ResponseEntityBuilder set(final String key, final Object value) {
+    public ResponseEntityBuilder set(String key, Object value) {
         map.put(key, value);
         return this;
     }
 
-    public void setSuccess(final boolean isSuccess) {
+    public ResponseEntityBuilder setSuccess(boolean isSuccess) {
         map.put("success", isSuccess);
+        return this;
     }
 
-    public ResponseEntityBuilder setDetails(final Object details) {
+    public ResponseEntityBuilder setDetails(Object details) {
         map.put("details", details);
         return this;
     }

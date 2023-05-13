@@ -1,7 +1,7 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.constant.ErrorMessage;
-import com.myblogbackend.blog.exception.BlogLangException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.mapper.PostMapper;
 import com.myblogbackend.blog.models.CategoryEntity;
 import com.myblogbackend.blog.pagination.OffsetPageRequest;
@@ -93,7 +93,7 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPostById(final UUID id) {
         var post = postRepository
                 .findById(id)
-                .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
+                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
         return postMapper.toPostResponse(post);
     }
 
@@ -101,7 +101,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse updatePost(final UUID id, final PostRequest postRequest) {
         var post = postRepository.findById(id)
-                .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
+                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
         var category = validateCategory(postRequest.getCategoryId());
         post.setTitle(postRequest.getTitle());
         post.setContent(postRequest.getContent());
@@ -112,6 +112,6 @@ public class PostServiceImpl implements PostService {
 
     private CategoryEntity validateCategory(final UUID categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BlogLangException(ErrorMessage.NOT_FOUND));
+                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
     }
 }

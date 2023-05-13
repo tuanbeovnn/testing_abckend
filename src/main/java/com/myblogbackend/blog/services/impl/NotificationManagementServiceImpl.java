@@ -1,8 +1,8 @@
 package com.myblogbackend.blog.services.impl;
 
 
-import com.myblogbackend.blog.constant.ErrorMessage;
-import com.myblogbackend.blog.exception.BlogLangException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.services.NotificationManagementService;
 import com.myblogbackend.blog.dtos.NotificationRequestDTO;
 import com.myblogbackend.blog.strategies.NotificationResponseCode;
@@ -33,8 +33,8 @@ public class NotificationManagementServiceImpl implements NotificationManagement
                         .build();
             }
             // push notification fail
-            throw new BlogLangException(ErrorMessage.EMAIL_SEND_FAILED);
-        } catch (BlogLangException notificationException) {
+            throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
+        } catch (BlogRuntimeException notificationException) {
             log.debug("NOTIFICATION::EXCEPTION an exception was occurred ", notificationException);
             // handle by controller advice
             throw notificationException;

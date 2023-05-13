@@ -1,8 +1,9 @@
 package com.myblogbackend.blog.services.impl;
 
 import com.myblogbackend.blog.event.OnUserLogoutSuccessEvent;
-import com.myblogbackend.blog.exception.ResourceNotFoundException;
 import com.myblogbackend.blog.exception.UserLogoutException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.models.UserVerificationTokenEntity;
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     private UserEntity getUserById(final UUID id) {
         return usersRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
     }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {

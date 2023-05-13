@@ -1,10 +1,10 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.constant.ErrorMessage;
 import com.myblogbackend.blog.enums.OAuth2Provider;
 import com.myblogbackend.blog.event.OnAuthListenerEvent;
-import com.myblogbackend.blog.exception.BlogLangException;
 import com.myblogbackend.blog.exception.TokenRefreshException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
+import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.RefreshTokenEntity;
 import com.myblogbackend.blog.models.UserDeviceEntity;
@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
                         new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
                 );
             } catch (Exception ex) {
-                throw new BlogLangException(ErrorMessage.EMAIL_SEND_FAILED);
+                throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
             }
         }
         return userMapper.toUserDTO(result);
@@ -155,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
         } catch (BadCredentialsException e) {
-            throw new BlogLangException(ErrorMessage.USER_NOT_AUTHORIZATION, e);
+            throw new BlogRuntimeException(ErrorCode.UNAUTHORIZED);
         }
     }
 
