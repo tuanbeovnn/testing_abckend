@@ -3,7 +3,6 @@ package com.myblogbackend.blog.services.impl;
 import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
 import com.myblogbackend.blog.exception.commons.ErrorCode;
 import com.myblogbackend.blog.mapper.CommentMapper;
-import com.myblogbackend.blog.models.CommentEntity;
 import com.myblogbackend.blog.pagination.OffsetPageRequest;
 import com.myblogbackend.blog.pagination.PaginationPage;
 import com.myblogbackend.blog.repositories.CommentRepository;
@@ -18,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Override
-    public CommentResponse createComment(CommentRequest commentRequest) {
+    public CommentResponse createComment(final CommentRequest commentRequest) {
         try {
             //get the user signed in
             var signedInUser = JWTSecurityUtil.getJWTUserInfo().orElseThrow();
@@ -61,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PaginationPage<CommentResponse> getListCommentsByPostId(Integer offset, Integer limited, UUID postId) {
+    public PaginationPage<CommentResponse> getListCommentsByPostId(final Integer offset, final Integer limited, final UUID postId) {
         try {
             //create the pageable by OffsetPageRequest class
             var pageable = new OffsetPageRequest(offset, limited);
@@ -71,8 +68,7 @@ public class CommentServiceImpl implements CommentService {
             var commentResponseList = commentEntityList
                     .getContent()
                     .stream()
-                    .map(item ->
-                            commentMapper.toCommentResponse(item))
+                    .map(commentMapper::toCommentResponse)
                     .collect(Collectors.toList());
             //add logger
             logger.info("Get list of comment by post id successfully {}", postId);
