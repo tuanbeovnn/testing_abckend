@@ -76,38 +76,54 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PaginationPage<PostResponse> getAllPostsByCategoryId(final Integer offset, final Integer limited, final UUID categoryId) {
-        var pageable = new OffsetPageRequest(offset, limited);
-        var posts = postRepository.findAllByCategoryId(pageable, categoryId);
-        var postResponses = posts.getContent().stream()
-                .map(postMapper::toPostResponse)
-                .collect(Collectors.toList());
-
-        return new PaginationPage<PostResponse>()
-                .setRecords(postResponses)
-                .setOffset(posts.getNumber())
-                .setLimit(posts.getSize())
-                .setTotalRecords(posts.getTotalElements());
+        try {
+            var pageable = new OffsetPageRequest(offset, limited);
+            var posts = postRepository.findAllByCategoryId(pageable, categoryId);
+            var postResponses = posts.getContent().stream()
+                    .map(postMapper::toPostResponse)
+                    .collect(Collectors.toList());
+            logger.info("Post get succeeded with offset: {} and limited {}", posts.getNumber(), posts.getSize());
+            return new PaginationPage<PostResponse>()
+                    .setRecords(postResponses)
+                    .setOffset(posts.getNumber())
+                    .setLimit(posts.getSize())
+                    .setTotalRecords(posts.getTotalElements());
+        } catch (Exception e) {
+            logger.error("Failed to  get all posts by category id", e);
+            throw new RuntimeException("Failed to get all posts by category id");
+        }
     }
 
     @Override
     public PostResponse getPostById(final UUID id) {
-        var post = postRepository
-                .findById(id)
-                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
-        return postMapper.toPostResponse(post);
+        try {
+            var post = postRepository
+                    .findById(id)
+                    .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
+            logger.error("Get post successfully by id {} ", id);
+            return postMapper.toPostResponse(post);
+        } catch (Exception e) {
+            logger.error("Failed to get post by id", e);
+            throw new RuntimeException("Failed to get post by id");
+        }
     }
-
 
     @Override
     public PostResponse updatePost(final UUID id, final PostRequest postRequest) {
-        var post = postRepository.findById(id)
-                .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
-        var category = validateCategory(postRequest.getCategoryId());
-        post.setTitle(postRequest.getTitle());
-        post.setContent(postRequest.getContent());
-        post.setCategory(category);
-        var updatedPost = postRepository.save(post);
-        return postMapper.toPostResponse(updatedPost);
+        try {
+            var post = postRepository.findById(id)
+                    .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
+            var category = validateCategory(postRequest.getCategoryId());
+            post.setTitle(postRequest.getTitle());
+            post.setContent(postRequest.getContent());
+            post.setCategory(category);
+            var updatedPost = postRepository.save(post);
+            logger.info("Update post successfully with id {} ", id);
+            return postMapper.toPostResponse(updatedPost);
+        } catch (Exception e) {
+            logger.error("Failed to update post by id", e);
+            throw new RuntimeException("Failed to update post by id");
+        }
     }
 
     private CategoryEntity validateCategory(final UUID categoryId) {
