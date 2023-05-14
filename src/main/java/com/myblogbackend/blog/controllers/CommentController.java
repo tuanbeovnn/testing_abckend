@@ -8,9 +8,9 @@ import com.myblogbackend.blog.response.CommentResponse;
 import com.myblogbackend.blog.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping(CommonRoutes.BASE_API + CommonRoutes.VERSION + CommentRoutes.BASE_URL)
@@ -22,5 +22,14 @@ public class CommentController {
     public ResponseEntity<?> createComment(CommentRequest commentRequest) {
         var commentResponse = commentService.createComment(commentRequest);
         return ResponseEntity.ok(commentResponse);
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getListCommentsByPostId(
+            @RequestParam(name = "offset", defaultValue = "0") final Integer offset,
+            @RequestParam(name = "limit", defaultValue = "10") final Integer limit,
+            @PathVariable(value = "postId") UUID postId) {
+        var commentResponseList = commentService.getListCommentsByPostId(offset, limit, postId);
+        return ResponseEntity.ok(commentResponseList);
     }
 }
