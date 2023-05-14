@@ -35,7 +35,7 @@ public class CommentEntity {
     private String content;
 
     @Column(name = "status")
-    private String status;
+    private String status = "active";
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id" )
