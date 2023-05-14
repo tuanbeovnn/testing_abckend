@@ -1,9 +1,10 @@
 package com.myblogbackend.blog.services.impl;
 
-import com.myblogbackend.blog.exception.commons.ErrorCode;
 import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
 import com.myblogbackend.blog.mapper.PostMapper;
 import com.myblogbackend.blog.models.CategoryEntity;
+import com.myblogbackend.blog.models.PostEntity;
 import com.myblogbackend.blog.pagination.OffsetPageRequest;
 import com.myblogbackend.blog.pagination.PaginationPage;
 import com.myblogbackend.blog.repositories.CategoryRepository;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -59,15 +61,8 @@ public class PostServiceImpl implements PostService {
         try {
             var pageable = new OffsetPageRequest(offset, limited);
             var postEntities = postRepository.findAllByUserId(userId, pageable);
-            var postResponses = postEntities.getContent().stream()
-                    .map(postMapper::toPostResponse)
-                    .collect(Collectors.toList());
             logger.info("Post get succeeded with offset: {} and limited {}", postEntities.getNumber(), postEntities.getSize());
-            return new PaginationPage<PostResponse>()
-                    .setRecords(postResponses)
-                    .setOffset(postEntities.getNumber())
-                    .setLimit(postEntities.getSize())
-                    .setTotalRecords(postEntities.getTotalElements());
+            return getPostResponsePaginationPage(postEntities);
         } catch (Exception e) {
             logger.error("Failed to get list post", e);
             throw new RuntimeException("Failed to get list post");
@@ -79,15 +74,8 @@ public class PostServiceImpl implements PostService {
         try {
             var pageable = new OffsetPageRequest(offset, limited);
             var posts = postRepository.findAllByCategoryId(pageable, categoryId);
-            var postResponses = posts.getContent().stream()
-                    .map(postMapper::toPostResponse)
-                    .collect(Collectors.toList());
             logger.info("Post get succeeded with offset: {} and limited {}", posts.getNumber(), posts.getSize());
-            return new PaginationPage<PostResponse>()
-                    .setRecords(postResponses)
-                    .setOffset(posts.getNumber())
-                    .setLimit(posts.getSize())
-                    .setTotalRecords(posts.getTotalElements());
+            return getPostResponsePaginationPage(posts);
         } catch (Exception e) {
             logger.error("Failed to  get all posts by category id", e);
             throw new RuntimeException("Failed to get all posts by category id");
@@ -129,5 +117,16 @@ public class PostServiceImpl implements PostService {
     private CategoryEntity validateCategory(final UUID categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
+    }
+
+    private PaginationPage<PostResponse> getPostResponsePaginationPage(final Page<PostEntity> postEntities) {
+        var postResponses = postEntities.getContent().stream()
+                .map(postMapper::toPostResponse)
+                .collect(Collectors.toList());
+        return new PaginationPage<PostResponse>()
+                .setRecords(postResponses)
+                .setOffset(postEntities.getNumber())
+                .setLimit(postEntities.getSize())
+                .setTotalRecords(postEntities.getTotalElements());
     }
 }

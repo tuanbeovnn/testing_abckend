@@ -26,7 +26,7 @@ public class CommentController {
     public ResponseEntity<?> getListCommentsByPostId(
             @RequestParam(name = "offset", defaultValue = "0") final Integer offset,
             @RequestParam(name = "limit", defaultValue = "10") final Integer limit,
-            @PathVariable(value = "postId") UUID postId) {
+            @PathVariable(value = "postId") final UUID postId) {
         var commentResponseList = commentService.getListCommentsByPostId(offset, limit, postId);
         return ResponseEntity.ok(commentResponseList);
     }
