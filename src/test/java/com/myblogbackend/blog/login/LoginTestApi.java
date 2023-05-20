@@ -1,0 +1,86 @@
+package com.myblogbackend.blog.login;
+
+import com.myblogbackend.blog.models.RefreshTokenEntity;
+import com.myblogbackend.blog.models.UserDeviceEntity;
+import com.myblogbackend.blog.models.UserEntity;
+import com.myblogbackend.blog.request.DeviceInfoRequest;
+import com.myblogbackend.blog.request.LoginFormRequest;
+import com.myblogbackend.blog.response.JwtResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.Instant;
+import java.util.UUID;
+
+public final class LoginTestApi {
+    @Autowired
+    private static PasswordEncoder encoder;
+    public static final long ONE_HOUR_IN_MILLIS = 3600000;
+
+    //create device info request for login request mock data
+    public static DeviceInfoRequest deviceInfoSaving() {
+        return DeviceInfoRequest.builder()
+                .deviceId("123123")
+                .deviceType("phone")
+                .build();
+    }
+
+    //create login request
+    public static LoginFormRequest loginDataForSaving() {
+        return LoginFormRequest.builder()
+                .email("thoa@gmail.com")
+                .password("123123")
+                .deviceInfo(deviceInfoSaving())
+                .build();
+    }
+
+    //create refresh token
+    public static RefreshTokenEntity refreshTokenForSaving() {
+        return RefreshTokenEntity.builder()
+                .id(UUID.randomUUID())
+                .expiryDate(Instant.now().plusMillis(ONE_HOUR_IN_MILLIS))
+                .token(UUID.randomUUID().toString())
+                .refreshCount(0L)
+                .build();
+    }
+
+    //create the user entity after find by email successfully
+    public static UserEntity userEntityForSaving(UUID userId) {
+        return UserEntity.builder()
+                .id(userId)
+                .name("thoa")
+                .email("thoa@gmail.com")
+                .password(encoder.encode("123123"))
+                .active(true)
+                .build();
+    }
+
+    //create the jwt response after login successfully
+    public static JwtResponse jwtResponseForSaving(String jwtToken, String refreshToken, long expirationDuration) {
+        return JwtResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .expiryDuration(expirationDuration)
+                .build();
+    }
+
+    //create user device entity
+    public static UserDeviceEntity userDeviceForSaving(DeviceInfoRequest deviceInfoRequest) {
+        return UserDeviceEntity.builder()
+                .deviceId("123123")
+                .deviceType("phone")
+                .isRefreshActive(true)
+                .build();
+    }
+
+    //create refresh token with LoginRequest , User Entity
+    public static RefreshTokenEntity createRefreshTokenEntity(LoginFormRequest loginFormRequest, UserEntity userEntity) {
+        var userDeviceEntity = userDeviceForSaving(deviceInfoSaving());
+        var refreshTokenEntity = refreshTokenForSaving();
+        userDeviceEntity.setUser(userEntity);
+        userDeviceEntity.setRefreshToken(refreshTokenEntity);
+        return RefreshTokenEntity.builder()
+                .userDevice(userDeviceEntity)
+                .build();
+    }
+}

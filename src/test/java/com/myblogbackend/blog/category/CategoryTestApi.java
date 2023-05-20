@@ -8,7 +8,6 @@ import java.util.UUID;
 
 public final class CategoryTestApi {
 
-
     public static CategoryEntity makeCategoryForSaving(final UUID id) {
         return CategoryEntity.builder()
                 .id(id)

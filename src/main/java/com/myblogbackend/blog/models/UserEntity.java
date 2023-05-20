@@ -3,10 +3,7 @@ package com.myblogbackend.blog.models;
 import com.myblogbackend.blog.enums.OAuth2Provider;
 import com.myblogbackend.blog.models.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserEntity extends BaseEntity {
 
     @Id
@@ -37,6 +35,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean active;
+
     @Column(name = "provider")
     @Enumerated(EnumType.STRING)
     private OAuth2Provider provider;
