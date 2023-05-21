@@ -1,5 +1,6 @@
 package com.myblogbackend.blog.login;
 
+import com.myblogbackend.blog.enums.OAuth2Provider;
 import com.myblogbackend.blog.models.RefreshTokenEntity;
 import com.myblogbackend.blog.models.UserDeviceEntity;
 import com.myblogbackend.blog.models.UserEntity;
@@ -13,22 +14,20 @@ import java.time.Instant;
 import java.util.UUID;
 
 public final class LoginTestApi {
-    @Autowired
-    private static PasswordEncoder encoder;
     public static final long ONE_HOUR_IN_MILLIS = 3600000;
 
     //create device info request for login request mock data
     public static DeviceInfoRequest deviceInfoSaving() {
         return DeviceInfoRequest.builder()
-                .deviceId("123123")
-                .deviceType("phone")
+                .deviceId("aaaa-aaaa-aaaa-aaaa")
+                .deviceType("BROWER_CHROME")
                 .build();
     }
 
     //create login request
-    public static LoginFormRequest loginDataForSaving() {
+    public static LoginFormRequest loginDataForRequesting() {
         return LoginFormRequest.builder()
-                .email("thoa@gmail.com")
+                .email("test@gmail.com")
                 .password("123123")
                 .deviceInfo(deviceInfoSaving())
                 .build();
@@ -45,13 +44,14 @@ public final class LoginTestApi {
     }
 
     //create the user entity after find by email successfully
-    public static UserEntity userEntityForSaving(UUID userId) {
+    public static UserEntity userEntityForSaving(UUID userId, String password) {
         return UserEntity.builder()
                 .id(userId)
-                .name("thoa")
-                .email("thoa@gmail.com")
-                .password(encoder.encode("123123"))
-                .active(true)
+                .name("test")
+                .email("test@gmail.com")
+                .password(password)
+                .active(false)
+                .provider(OAuth2Provider.LOCAL)
                 .build();
     }
 
@@ -67,8 +67,8 @@ public final class LoginTestApi {
     //create user device entity
     public static UserDeviceEntity userDeviceForSaving(DeviceInfoRequest deviceInfoRequest) {
         return UserDeviceEntity.builder()
-                .deviceId("123123")
-                .deviceType("phone")
+                .deviceId("aaaa-aaaa-aaaa-aaaa")
+                .deviceType("BROWER_CHROME")
                 .isRefreshActive(true)
                 .build();
     }
