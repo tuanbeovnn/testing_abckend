@@ -125,7 +125,7 @@ public class LoginApiDelegateImplTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken", is(jwtToken)))
                 .andExpect(jsonPath("$.refreshToken", is(refreshToken.getToken())))
-                .andExpect(jsonPath("$.expiryDuration", is(expiryDuration)));
+                .andExpect(jsonPath("$.expiryDuration").value((int) expiryDuration));
     }
 
 }
