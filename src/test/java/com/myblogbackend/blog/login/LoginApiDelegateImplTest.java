@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -88,9 +88,7 @@ public class LoginApiDelegateImplTest {
         //mock user entity
         Mockito.when(usersRepository.findByEmail(loginDataRequest.getEmail())).thenReturn(Optional.of(userEntity));
         //create UsernamePasswordAuthenticationToken
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                loginDataRequest.getEmail(),
-                loginDataRequest.getPassword());
+        Authentication authentication = createAuthenticationByLoginRequest(loginDataRequest);
         //mock authentication manager
         Mockito.when(authenticationManager.authenticate(authentication)).thenReturn(authentication);
         //set the authentication to SecurityContextHolder

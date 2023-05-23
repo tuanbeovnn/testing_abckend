@@ -7,6 +7,8 @@ import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.request.DeviceInfoRequest;
 import com.myblogbackend.blog.request.LoginFormRequest;
 import com.myblogbackend.blog.response.JwtResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -80,6 +82,13 @@ public final class LoginTestApi {
         return RefreshTokenEntity.builder()
                 .userDevice(userDeviceEntity)
                 .build();
+    }
+
+    public static Authentication createAuthenticationByLoginRequest(LoginFormRequest loginFormRequest) {
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                loginFormRequest.getEmail(),
+                loginFormRequest.getPassword());
+        return authentication;
     }
 
     public static String mockJwtToken() {
