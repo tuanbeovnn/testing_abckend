@@ -21,7 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -37,7 +36,6 @@ import static com.myblogbackend.blog.ResponseBodyMatcher.responseBody;
 import static com.myblogbackend.blog.login.LoginTestApi.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -113,49 +111,5 @@ public class LoginApiDelegateImplTest {
                 .andExpect(jsonPath("$.refreshToken", is(refreshToken.getToken())))
                 .andExpect(jsonPath("$.expiryDuration").value((int) expirationDuration))
                 .andExpect(responseBody().containsObjectBody(jwtResponse, JwtResponse.class, objectMapper));
-    }
-
-
-    @Test
-    public void givenLoginDataV2_whenSendData_thenReturnsJwtResponseCreated() throws Exception {
-//        // create user and save to database
-//        UUID userId = UUID.randomUUID();
-//        UserEntity userEntity = userEntityForSaving(userId, passwordEncoder.encode("123456"));
-//        var userSignInRequest = loginDataForRequesting();
-//
-//        // Mock findByEmail
-//        Mockito.when(usersRepository.findByEmail(userSignInRequest.getEmail())).thenReturn(Optional.of(userEntity));
-//
-//        // Mock authentication result
-//        UsernamePasswordAuthenticationToken authentication =
-//                new UsernamePasswordAuthenticationToken(userSignInRequest.getEmail(), userSignInRequest.getPassword());
-//
-//        // Mock authentication manager
-//        Mockito.when(authenticationManager.authenticate(authentication)).thenReturn(authentication);
-//
-//        // Set the authentication in SecurityContextHolder
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        String jwtToken = "mockJwtToken";
-//        // Mock JWT provider
-//        Mockito.when(jwtProvider.generateJwtToken(authentication)).thenReturn(jwtToken);
-//
-//        // Mock and return a non-null refreshToken
-//        RefreshTokenEntity refreshToken = refreshTokenForSaving();
-//
-//        Mockito.when(refreshTokenRepository.save(Mockito.any())).thenReturn(refreshToken);
-//
-//        // Set the expiry duration to 3600000 milliseconds (1 hour)
-//        long expiryDuration = 3600000L;
-//        Mockito.when(jwtProvider.getExpiryDuration()).thenReturn(expiryDuration);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/signin")
-//                        .content(IntegrationTestUtil.asJsonString(userSignInRequest))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.accessToken", is(jwtToken)))
-//                .andExpect(jsonPath("$.refreshToken", is(refreshToken.getToken())))
-//                .andExpect(jsonPath("$.expiryDuration").value((int) expiryDuration));
-//    }
     }
 }

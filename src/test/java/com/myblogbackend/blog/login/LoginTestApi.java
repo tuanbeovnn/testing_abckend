@@ -7,8 +7,6 @@ import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.request.DeviceInfoRequest;
 import com.myblogbackend.blog.request.LoginFormRequest;
 import com.myblogbackend.blog.response.JwtResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.UUID;
