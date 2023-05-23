@@ -83,4 +83,14 @@ public final class LoginTestApi {
                 .userDevice(userDeviceEntity)
                 .build();
     }
+
+    public static String mockJwtToken() {
+        String jwtToken = "mockJwtToken";
+        return jwtToken;
+    }
+
+    public static String mockPassword() {
+        String password = "123456";
+        return password;
+    }
 }
