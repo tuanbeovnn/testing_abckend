@@ -106,7 +106,7 @@ public class CategoryApiDelegateImplTest {
         // unexpectedException
         var unexpectedException = "Could not find the Id";
         // Perform the API request and validate the response
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/category/{id}", categoryIdRandom))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/category/{id}", categoryIdRandom))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is(unexpectedException)));
     }
