@@ -85,10 +85,9 @@ public final class LoginTestApi {
     }
 
     public static Authentication createAuthenticationByLoginRequest(LoginFormRequest loginFormRequest) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+        return new UsernamePasswordAuthenticationToken(
                 loginFormRequest.getEmail(),
                 loginFormRequest.getPassword());
-        return authentication;
     }
 
     public static String mockJwtToken() {
