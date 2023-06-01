@@ -57,9 +57,7 @@ public class LoginApiDelegateImplTest {
     @MockBean
     private RefreshTokenRepository refreshTokenRepository;
     private LoginFormRequest loginDataRequest;
-    private UUID userId;
     private String jwtToken;
-    private String password;
     private long expirationDuration;
     private RefreshTokenEntity refreshToken;
     private UserEntity userEntity;
@@ -72,10 +70,10 @@ public class LoginApiDelegateImplTest {
 
     @Before
     public void setup() {
-        userId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
         loginDataRequest = loginDataForRequesting();
         jwtToken = mockJwtToken();
-        password = mockPassword();
+        String password = "123456";
         expirationDuration = 3600000L;
         userEntity = userEntityForSaving(userId, passwordEncoder.encode(password));
         refreshToken = createRefreshTokenEntity(loginDataRequest, userEntity);
