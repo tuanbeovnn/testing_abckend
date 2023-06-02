@@ -8,8 +8,8 @@ import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.UserEntity;
 import com.myblogbackend.blog.models.UserVerificationTokenEntity;
 import com.myblogbackend.blog.repositories.RefreshTokenRepository;
-import com.myblogbackend.blog.repositories.TokenRepository;
 import com.myblogbackend.blog.repositories.UserDeviceRepository;
+import com.myblogbackend.blog.repositories.UserTokenRepository;
 import com.myblogbackend.blog.repositories.UsersRepository;
 import com.myblogbackend.blog.request.LogOutRequest;
 import com.myblogbackend.blog.response.UserResponse;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    private final TokenRepository tokenRepository;
+    private final UserTokenRepository tokenRepository;
 
     @Override
     public void logoutUser(final LogOutRequest logOutRequest, final UserPrincipal currentUser) {
