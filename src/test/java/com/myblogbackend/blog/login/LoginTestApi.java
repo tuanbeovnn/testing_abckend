@@ -44,7 +44,7 @@ public final class LoginTestApi {
     }
 
     //create the user entity after find by email successfully
-    public static UserEntity userEntityForSaving(UUID userId, String password) {
+    public static UserEntity userEntityForSaving(final UUID userId, final String password) {
         return UserEntity.builder()
                 .id(userId)
                 .name("test")
@@ -56,7 +56,7 @@ public final class LoginTestApi {
     }
 
     //create the jwt response after login successfully
-    public static JwtResponse jwtResponseForSaving(String jwtToken, String refreshToken, long expirationDuration) {
+    public static JwtResponse jwtResponseForSaving(final String jwtToken, final String refreshToken, final long expirationDuration) {
         return JwtResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -65,7 +65,7 @@ public final class LoginTestApi {
     }
 
     //create user device entity
-    public static UserDeviceEntity userDeviceForSaving(DeviceInfoRequest deviceInfoRequest) {
+    public static UserDeviceEntity userDeviceForSaving(final DeviceInfoRequest deviceInfoRequest) {
         return UserDeviceEntity.builder()
                 .deviceId("aaaa-aaaa-aaaa-aaaa")
                 .deviceType("BROWER_CHROME")
@@ -74,7 +74,7 @@ public final class LoginTestApi {
     }
 
     //create refresh token with LoginRequest , User Entity
-    public static RefreshTokenEntity createRefreshTokenEntity(LoginFormRequest loginFormRequest, UserEntity userEntity) {
+    public static RefreshTokenEntity createRefreshTokenEntity(final LoginFormRequest loginFormRequest, final UserEntity userEntity) {
         var userDeviceEntity = userDeviceForSaving(deviceInfoSaving());
         var refreshTokenEntity = refreshTokenForSaving();
         userDeviceEntity.setUser(userEntity);
@@ -84,7 +84,7 @@ public final class LoginTestApi {
                 .build();
     }
 
-    public static Authentication createAuthenticationByLoginRequest(LoginFormRequest loginFormRequest) {
+    public static Authentication createAuthenticationByLoginRequest(final LoginFormRequest loginFormRequest) {
         return new UsernamePasswordAuthenticationToken(
                 loginFormRequest.getEmail(),
                 loginFormRequest.getPassword());
