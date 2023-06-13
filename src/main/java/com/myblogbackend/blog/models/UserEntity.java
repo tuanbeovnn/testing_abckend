@@ -44,6 +44,9 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ViewersEntity> viewers;
+
 
     public void activate() {
         this.active = true;
