@@ -45,7 +45,4 @@ public class PostEntity extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    private List<ViewersEntity> viewers;
-
 }
