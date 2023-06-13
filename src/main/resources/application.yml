@@ -54,4 +54,4 @@ email:
         base-url: http://localhost:8080/user/api/v1/auth/regitrationConfirm?token=%s
 
 app:
-    generate-categories: false
+    generate-categories: true

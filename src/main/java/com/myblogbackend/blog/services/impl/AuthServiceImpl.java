@@ -82,15 +82,15 @@ public class AuthServiceImpl implements AuthService {
         createdUser.setName(signUpRequest.getName());
         createdUser.setProvider(OAuth2Provider.LOCAL);
         UserEntity result = usersRepository.save(createdUser);
-        if (!ObjectUtils.isEmpty(result)) {
-            try {
-                eventPublisher.publishEvent(
-                        new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
-                );
-            } catch (Exception ex) {
-                throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
-            }
-        }
+//        if (!ObjectUtils.isEmpty(result)) {
+//            try {
+//                eventPublisher.publishEvent(
+//                        new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
+//                );
+//            } catch (Exception ex) {
+//                throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
+//            }
+//        }
         return userMapper.toUserDTO(result);
     }
 

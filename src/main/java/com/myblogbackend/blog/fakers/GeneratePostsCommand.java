@@ -2,8 +2,11 @@ package com.myblogbackend.blog.fakers;
 
 import com.github.javafaker.Faker;
 import com.myblogbackend.blog.repositories.CategoryRepository;
+import com.myblogbackend.blog.repositories.PostRepository;
 import com.myblogbackend.blog.request.CategoryRequest;
+import com.myblogbackend.blog.request.PostRequest;
 import com.myblogbackend.blog.services.CategoryService;
+import com.myblogbackend.blog.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -13,26 +16,31 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(2)
 @RequiredArgsConstructor
-public class GenerateCategoriesCommand implements CommandLineRunner {
+public class GeneratePostsCommand implements CommandLineRunner {
 
-    private final CategoryService categoryService;
+    private final PostService postService;
     private final Environment environment;
+    private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+
 
     @Override
     public void run(final String... args) throws Exception {
-        boolean shouldGenerate = environment.getProperty("app.generate-categories", Boolean.class, true);
+        boolean shouldGenerate = environment.getProperty("app.generate-posts", Boolean.class, true);
         if (!shouldGenerate) {
             return;
         }
         Faker faker = new Faker();
-        var categoryList = categoryRepository.findAll();
-        if (categoryList.size() < 5) {
+        var postEntityList = postRepository.findAll();
+        var category = categoryRepository.findAll().get(0);
+        if (postEntityList.size() < 5) {
             for (int i = 0; i < 10; i++) {
-                CategoryRequest categoryRequest = CategoryRequest.builder()
-                        .name(faker.commerce().productName())
+                PostRequest postRequest = PostRequest.builder()
+                        .title(faker.commerce().department())
+                        .content(faker.commerce().productName())
+                        .categoryId(category.getId())
                         .build();
-                categoryService.createCategory(categoryRequest);
+                postService.createPost(postRequest);
             }
         }
     }
