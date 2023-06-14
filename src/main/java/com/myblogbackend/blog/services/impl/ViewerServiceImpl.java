@@ -29,16 +29,16 @@ public class ViewerServiceImpl implements ViewerService {
         var post = postRepository
                 .findById(postId)
                 .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
-        if (viewerRepository.existsByPostId(postId)) {
-            logger.error("Update viewer successfully by id {} ", postId);
-            viewerRepository.updateViewer(postId);
+        if (viewerRepository.existsByPostId(post.getId())) {
+            logger.error("Update viewer successfully by id {} ", post.getId());
+            viewerRepository.updateViewer(post.getId());
             return;
         }
         var viewers = ViewersEntity.builder()
                 .viewCounter(1)
-                .postId(postId)
+                .postId(post.getId())
                 .build();
-        logger.error("Create new viewer successfully for postId by id {} ", postId);
+        logger.error("Create new viewer successfully for postId by id {} ", post.getId());
         viewerRepository.save(viewers);
     }
 }
