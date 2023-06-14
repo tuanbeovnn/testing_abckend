@@ -3,8 +3,8 @@ package com.myblogbackend.blog.services.impl;
 import com.myblogbackend.blog.enums.OAuth2Provider;
 import com.myblogbackend.blog.event.OnAuthListenerEvent;
 import com.myblogbackend.blog.exception.TokenRefreshException;
-import com.myblogbackend.blog.exception.commons.ErrorCode;
 import com.myblogbackend.blog.exception.commons.BlogRuntimeException;
+import com.myblogbackend.blog.exception.commons.ErrorCode;
 import com.myblogbackend.blog.mapper.UserMapper;
 import com.myblogbackend.blog.models.RefreshTokenEntity;
 import com.myblogbackend.blog.models.UserDeviceEntity;
@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,7 +33,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -82,15 +82,15 @@ public class AuthServiceImpl implements AuthService {
         createdUser.setName(signUpRequest.getName());
         createdUser.setProvider(OAuth2Provider.LOCAL);
         UserEntity result = usersRepository.save(createdUser);
-//        if (!ObjectUtils.isEmpty(result)) {
-//            try {
-//                eventPublisher.publishEvent(
-//                        new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
-//                );
-//            } catch (Exception ex) {
-//                throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
-//            }
-//        }
+        if (!ObjectUtils.isEmpty(result)) {
+            try {
+                eventPublisher.publishEvent(
+                        new OnAuthListenerEvent(result, request.getRequestURL().toString(), "REGISTER")
+                );
+            } catch (Exception ex) {
+                throw new BlogRuntimeException(ErrorCode.EMAIL_SEND_FAILED);
+            }
+        }
         return userMapper.toUserDTO(result);
     }
 

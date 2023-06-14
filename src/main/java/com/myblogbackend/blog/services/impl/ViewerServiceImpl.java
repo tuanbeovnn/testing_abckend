@@ -6,6 +6,7 @@ import com.myblogbackend.blog.models.ViewersEntity;
 import com.myblogbackend.blog.repositories.PostRepository;
 import com.myblogbackend.blog.repositories.ViewerRepository;
 import com.myblogbackend.blog.services.ViewerService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -19,23 +20,25 @@ import java.util.UUID;
 @Slf4j
 public class ViewerServiceImpl implements ViewerService {
     private static final Logger logger = LoggerFactory.getLogger(ViewerServiceImpl.class);
-
     private final ViewerRepository viewerRepository;
     private final PostRepository postRepository;
 
     @Override
-    public void countUserViewer(UUID postId) {
-        // find postId
+    @Transactional
+    public void countUserViewer(final UUID postId) {
         var post = postRepository
                 .findById(postId)
                 .orElseThrow(() -> new BlogRuntimeException(ErrorCode.ID_NOT_FOUND));
-        // set to db
-        ViewersEntity viewersEntity = new ViewersEntity();
-        viewersEntity.setPostId(postId);
-        // get view by post id
-        var viewCounterFound = viewerRepository.countViewCounterByPostId(postId);
-//        viewersEntity.setViewCounter();
-        viewerRepository.save(viewersEntity);
-
+        if (viewerRepository.existsByPostId(postId)) {
+            logger.error("Update viewer successfully by id {} ", postId);
+            viewerRepository.updateViewer(postId);
+            return;
+        }
+        var viewers = ViewersEntity.builder()
+                .viewCounter(1)
+                .postId(postId)
+                .build();
+        logger.error("Create new viewer successfully for postId by id {} ", postId);
+        viewerRepository.save(viewers);
     }
 }

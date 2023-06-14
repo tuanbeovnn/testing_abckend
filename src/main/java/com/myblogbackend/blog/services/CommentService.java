@@ -4,7 +4,6 @@ import com.myblogbackend.blog.pagination.PaginationPage;
 import com.myblogbackend.blog.request.CommentRequest;
 import com.myblogbackend.blog.response.CommentResponse;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface CommentService {

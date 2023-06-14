@@ -24,7 +24,7 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<?> getAllPostsByUserId(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
                                                  @RequestParam(name = "limit", defaultValue = "10") final Integer limit, @PathVariable final UUID userId) {
         var postList = postService.getAllPostsByUserId(offset, limit, userId);
@@ -40,7 +40,7 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/categories/{categoryId}")
     public ResponseEntity<?> getAllPostsByCategoryId(@RequestParam(name = "offset", defaultValue = "0") final Integer offset,
                                                      @RequestParam(name = "limit", defaultValue = "10") final Integer limit,
                                                      @PathVariable(value = "categoryId") final UUID categoryId) {
